@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 import Installation from '../views/Installation.vue';
+import DocsPage from '../views/DocsPage.vue';
 
 Vue.use(VueRouter);
 
@@ -15,6 +16,11 @@ const routes = [
     path: '/installation',
     name: 'Installation',
     component: Installation,
+  },
+  {
+    path: '/docs/:version/:page',
+    name: 'docsPage',
+    component: DocsPage,
   },
   {
     path: '/about',

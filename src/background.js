@@ -1,6 +1,5 @@
-import { app, BrowserWindow, protocol, ipcMain } from 'electron';
+import { app, BrowserWindow, protocol } from 'electron';
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib';
-import Api from './api/Api';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -26,6 +25,7 @@ function createWindow() {
     height: 800,
     webPreferences: {
       nodeIntegration: true,
+      webSecurity: false,
     },
   });
 

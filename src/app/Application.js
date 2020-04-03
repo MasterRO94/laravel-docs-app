@@ -13,21 +13,12 @@ export default class Application {
     return Application.$instance = new this(VueApp, bus, ipc);
   }
 
-  init() {
+  async init() {
     this.vueApp.$mount('#app');
 
-    const messages = [
-      'Connecting to server...',
-      'Creating database...',
-      'Fetching fresh data...',
-      'Configuring staff...',
-    ];
+    await this.vueApp.$store.dispatch('loadDocs');
 
-    for (let i in messages) {
-      setTimeout(() => {
-        this.vueApp.$store.commit('setAppLoadingCaption', messages[i]);
-      }, i * 3000);
-    }
+    this.vueApp.$store.commit('setAppLoading', false);
   }
 
   static get $app() {

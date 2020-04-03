@@ -55,6 +55,7 @@ export default {
 
   .loader .loader-caption {
     text-align: center;
+    margin: 0 -200px 0 -200px;
   }
 
   .loader-full-screen .loader {
