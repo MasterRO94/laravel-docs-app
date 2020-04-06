@@ -25,7 +25,9 @@ export default class Kernel {
 
     const bus = new Vue();
 
-    Application.create(VueApp, bus, ipcRenderer).init();
+    window.App = Application.create(VueApp, bus, ipcRenderer);
+
+    window.App.init();
   }
 
   registerComponents() {

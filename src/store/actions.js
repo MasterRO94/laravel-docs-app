@@ -2,12 +2,34 @@ import Api from '../api/Api';
 import Documentation from '../app/Documentation';
 
 export default {
+  loadState({ commit, dispatch }) {
+    commit('setAppLoadingCaption', 'Loading...');
+
+    for (const version of Object.keys(Documentation.versions())) {
+      const docs = localStorage.getItem(`docs.${version}`);
+
+      if (docs) {
+        commit('setDocs', { version, docs: JSON.parse(docs) });
+      } else {
+        dispatch('loadDocsForVersion', version);
+      }
+    }
+
+    commit('setAppLoadingCaption', 'All done...');
+  },
+
+  async loadDocsForVersion({ state, dispatch }, version) {
+    await dispatch('loadSections', version);
+    await dispatch('loadPages', version);
+
+    localStorage.setItem(`docs.${version}`, JSON.stringify(state.docs[version]));
+  },
+
   async loadDocs({ commit, dispatch }) {
     commit('setAppLoadingCaption', 'Loading...');
 
     for (const version of Object.keys(Documentation.versions())) {
-      await dispatch('loadSections', version);
-      await dispatch('loadPages', version);
+      await dispatch('loadDocsForVersion', version);
     }
 
     commit('setAppLoadingCaption', 'All done...');

@@ -14,4 +14,5 @@ export default {
   appLoadingCaption: 'Loading docs...',
   currentVersion: '7.x',
   docs: docs,
+  currentPage: null,
 };

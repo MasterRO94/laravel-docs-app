@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
+import config from '../config';
 import Installation from '../views/Installation.vue';
 import DocsPage from '../views/DocsPage.vue';
 
@@ -9,12 +9,12 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
+    name: 'home',
+    redirect: `/docs/${config.defaultVersion}/installation`
   },
   {
     path: '/installation',
-    name: 'Installation',
+    name: 'installation',
     component: Installation,
   },
   {
@@ -24,7 +24,7 @@ const routes = [
   },
   {
     path: '/about',
-    name: 'About',
+    name: 'about',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
@@ -35,6 +35,7 @@ const routes = [
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
+  linkActiveClass: 'active',
   routes,
 });
 

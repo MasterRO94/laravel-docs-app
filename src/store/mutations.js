@@ -7,11 +7,19 @@ export default {
     state.appLoadingCaption = caption;
   },
 
+  setDocs(state, { version, docs }) {
+    state.docs[version] = docs;
+  },
+
   setSections(state, { version, sections }) {
     state.docs[version].sections = sections;
   },
 
   setPages(state, { version, pages }) {
     state.docs[version].pages = pages;
+  },
+
+  setCurrentPage(state, page) {
+    state.currentPage = page;
   },
 };

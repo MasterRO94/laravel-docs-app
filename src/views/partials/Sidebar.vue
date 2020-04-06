@@ -18,14 +18,17 @@
                   @click="toggleSection(section)"
               />
               <ul>
-                <li
+                <router-link
                     v-for="link in section.links"
                     :key="`${link.title} - ${link.uri}`"
+                    :to="link.uri"
+                    tag="li"
                 >
-                  <router-link :to="link.uri">
-                    {{ link.title }}
-                  </router-link>
-                </li>
+                  <a
+                      :href="`#!${link.uri}`"
+                      v-text="link.title"
+                  />
+                </router-link>
               </ul>
             </li>
           </ul>
@@ -52,18 +55,46 @@ export default {
   },
 
   computed: {
+    currentPage() {
+      return this.$store.state.currentPage;
+    },
+
     docs() {
       return this.$store.state.docs[this.$store.state.currentVersion].sections;
     },
   },
 
+  watch: {
+    $route() {
+      // if (this.currentPage && this.currentPage.section && !this.sectionOpened(this.currentPage.section)) {
+      //   this.closeAll();
+      //   this.openSection(this.currentPage.section);
+      // }
+    },
+  },
+
   methods: {
     toggleSection(section) {
+      this.closeAll();
+      this.openSection(section);
+    },
+
+    openSection(section) {
       if (!this.expanded.includes(section.title)) {
         this.expanded.push(section.title);
-      } else {
-        this.expanded = this.expanded.filter(title => title !== section.title);
       }
+    },
+
+    closeSection(section) {
+      this.expanded = this.expanded.filter(title => title !== section.title);
+    },
+
+    closeAll() {
+      this.expanded = [];
+    },
+
+    sectionOpened(section) {
+      return this.expanded.includes(section.title);
     },
   },
 };
