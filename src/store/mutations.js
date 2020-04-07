@@ -9,6 +9,10 @@ export default {
     state.appLoadingCaption = caption;
   },
 
+  setCurrentDocsVersion(state, version) {
+    state.currentVersion = version;
+  },
+
   setDocs(state, { version, docs }) {
     state.docs[version] = docs;
   },

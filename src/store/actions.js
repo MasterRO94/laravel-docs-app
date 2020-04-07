@@ -5,6 +5,12 @@ export default {
   loadState({ commit, dispatch }) {
     commit('setAppLoadingCaption', 'Loading...');
 
+    // const defaultDocsVersion = localStorage.getItem('defaultDocsVersion');
+    //
+    // if (defaultDocsVersion) {
+    //   commit('setCurrentDocsVersion', defaultDocsVersion);
+    // }
+
     for (const version of Object.keys(Documentation.versions())) {
       const docs = localStorage.getItem(`docs.${version}`);
 
@@ -54,5 +60,11 @@ export default {
     });
 
     commit('setPages', { version, pages });
+  },
+
+  setCurrentDocsVersion({ commit }, version) {
+    commit('setCurrentDocsVersion', version);
+
+    localStorage.setItem('defaultDocsVersion', version);
   },
 };

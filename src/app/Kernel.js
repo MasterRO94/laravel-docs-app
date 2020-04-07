@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import router from '../router';
 import store from '../store';
-import App from '../App';
+import App from '../views/App';
 import Application from './Application';
 import { ipcRenderer } from 'electron';
 import Loader from '../components/Loader';

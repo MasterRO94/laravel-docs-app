@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import Application from '../../app/Application';
+import Application from '../app/Application';
 
 export default {
   name: 'Sidebar',

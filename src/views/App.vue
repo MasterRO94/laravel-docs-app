@@ -13,9 +13,8 @@
           <sidebar />
 
           <div class="body_content">
-            <header class="docs_actions">
-              ACTIONS
-            </header>
+            <app-header />
+
             <div class="docs_body">
               <router-view />
             </div>
@@ -26,8 +25,17 @@
   </div>
 </template>
 
+<script>
+import AppHeader from './AppHeader';
+import Sidebar from './Sidebar';
+
+export default {
+  components: { Sidebar, AppHeader },
+};
+</script>
+
 <style>
-  @import './assets/css/app.css';
+  @import '../assets/css/app.css';
 
   #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -54,10 +62,3 @@
   /*  color: #42b983;*/
   /*}*/
 </style>
-<script>
-import Sidebar from './views/partials/Sidebar';
-
-export default {
-  components: { Sidebar },
-};
-</script>
