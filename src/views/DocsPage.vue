@@ -17,7 +17,7 @@ export default {
 
     section() {
       const [section] = this.$store.state.docs[this.$store.state.currentVersion].sections.filter(
-        sec => sec.links.filter(link => link.page === this.page.page),
+        sec => sec.links.filter(link => link.page === this.page.page).length,
       );
 
       return section;

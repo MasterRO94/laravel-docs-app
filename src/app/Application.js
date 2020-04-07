@@ -16,7 +16,7 @@ export default class Application {
   async init() {
     this.vueApp.$mount('#app');
 
-    await this.vueApp.$store.dispatch('loadState');
+    await this.vueApp.$store.dispatch('loadDocs');
 
     this.vueApp.$store.commit('setAppLoading', false);
   }

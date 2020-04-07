@@ -1,4 +1,4 @@
-import { app, BrowserWindow, protocol } from 'electron';
+import { app, BrowserWindow, protocol, shell } from 'electron';
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
@@ -41,6 +41,16 @@ function createWindow() {
 
   win.on('closed', () => {
     win = null;
+  });
+
+  win.webContents.on('will-navigate', (e, reqUrl) => {
+    let getHost = url => require('url').parse(url).host;
+    let reqHost = getHost(reqUrl);
+
+    if (reqHost && reqHost !== getHost(win.webContents.getURL())) {
+      e.preventDefault();
+      shell.openExternal(reqUrl);
+    }
   });
 }
 

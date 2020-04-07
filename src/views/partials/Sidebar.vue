@@ -18,17 +18,30 @@
                   @click="toggleSection(section)"
               />
               <ul>
-                <router-link
+                <template
                     v-for="link in section.links"
-                    :key="`${link.title} - ${link.uri}`"
-                    :to="link.uri"
-                    tag="li"
                 >
-                  <a
-                      :href="`#!${link.uri}`"
-                      v-text="link.title"
-                  />
-                </router-link>
+                  <router-link
+                      v-if="!link.uri.startsWith('http')"
+                      :key="`${link.title} - ${link.uri}`"
+                      :to="link.uri"
+                      tag="li"
+                  >
+                    <a
+                        :href="`#!${link.uri}`"
+                        v-text="link.title"
+                    />
+                  </router-link>
+                  <li
+                      v-else
+                      :key="`${link.title} - ${link.uri}`"
+                  >
+                    <a
+                        :href="link.uri"
+                        v-text="link.title"
+                    />
+                  </li>
+                </template>
               </ul>
             </li>
           </ul>
@@ -45,6 +58,8 @@
 </template>
 
 <script>
+import Application from '../../app/Application';
+
 export default {
   name: 'Sidebar',
 
@@ -52,6 +67,14 @@ export default {
     return {
       expanded: [],
     };
+  },
+
+  created() {
+    Application.$bus.$on('currentPageChanged', (currentPage) => {
+      if (!this.sectionOpened(currentPage.section)) {
+        this.openSection(currentPage.section);
+      }
+    });
   },
 
   computed: {
@@ -64,23 +87,17 @@ export default {
     },
   },
 
-  watch: {
-    $route() {
-      // if (this.currentPage && this.currentPage.section && !this.sectionOpened(this.currentPage.section)) {
-      //   this.closeAll();
-      //   this.openSection(this.currentPage.section);
-      // }
-    },
-  },
-
   methods: {
     toggleSection(section) {
-      this.closeAll();
-      this.openSection(section);
+      if (!this.sectionOpened(section)) {
+        this.openSection(section);
+      } else {
+        this.closeSection(section);
+      }
     },
 
     openSection(section) {
-      if (!this.expanded.includes(section.title)) {
+      if (!this.sectionOpened(section)) {
         this.expanded.push(section.title);
       }
     },

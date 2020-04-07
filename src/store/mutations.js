@@ -1,3 +1,5 @@
+import Application from '../app/Application';
+
 export default {
   setAppLoading(state, loading) {
     state.appLoading = loading;
@@ -21,5 +23,6 @@ export default {
 
   setCurrentPage(state, page) {
     state.currentPage = page;
+    Application.$bus.$emit('currentPageChanged', page);
   },
 };

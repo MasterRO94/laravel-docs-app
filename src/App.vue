@@ -37,6 +37,10 @@
     min-height: 600px;
   }
 
+  .sidebar {
+    padding-bottom: 40px;
+  }
+
   /*#nav {*/
   /*  padding: 30px;*/
   /*}*/

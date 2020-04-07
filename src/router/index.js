@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import config from '../config';
 import Installation from '../views/Installation.vue';
 import DocsPage from '../views/DocsPage.vue';
+import External from '../views/External.vue';
 
 Vue.use(VueRouter);
 
@@ -23,12 +24,9 @@ const routes = [
     component: DocsPage,
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    path: '*',
+    name: 'external',
+    component: External,
   },
 ];
 

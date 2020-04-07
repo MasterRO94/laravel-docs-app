@@ -1,4 +1,5 @@
 import Documentation from '../app/Documentation';
+import config from '../config';
 
 const docs = {};
 
@@ -12,7 +13,7 @@ Object.keys(Documentation.versions()).forEach((version) => {
 export default {
   appLoading: true,
   appLoadingCaption: 'Loading docs...',
-  currentVersion: '7.x',
+  currentVersion: config.defaultVersion,
   docs: docs,
   currentPage: null,
 };
