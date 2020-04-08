@@ -3,12 +3,12 @@
   "productName": "Laravel Docs App",
   "version": "0.1.5",
   "private": true,
-  "author" : "Roman Ihoshyn <igoshin18@gmail.com>",
+  "author": "Roman Ihoshyn <igoshin18@gmail.com>",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "electron:build": "vue-cli-service electron:build",
+    "electron:build": "vue-cli-service electron:build -mwl",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
@@ -19,6 +19,7 @@
     "core-js": "^3.6.4",
     "prismjs": "^1.19.0",
     "vue": "^2.6.11",
+    "vue-prism": "^1.0.5",
     "vue-router": "^3.1.5",
     "vuex": "^3.1.2"
   },

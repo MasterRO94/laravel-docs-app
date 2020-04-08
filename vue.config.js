@@ -6,9 +6,12 @@ module.exports = {
         productName: 'Laravel Docs App',
         mac: {
           category: 'public.app-category.developer-tools',
-          icon: 'public/img/logomark.png'
+          icon: 'public/img/logomark.png',
         },
-      }
-    }
-  }
-}
+        dmg: {
+          title: '${productName} ${version}',
+        },
+      },
+    },
+  },
+};

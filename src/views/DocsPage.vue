@@ -1,11 +1,13 @@
 <template>
   <section
       class="docs_main"
+      v-if="content"
       v-html="content"
   />
 </template>
 
 <script>
+import Prism from '../vendor/prism';
 
 export default {
   name: 'DocsPage',
@@ -24,8 +26,7 @@ export default {
     },
 
     content() {
-      const content = this.page.content;
-      return content ? content : 'Loading...';
+      return this.page.content;
     },
   },
 
@@ -35,5 +36,9 @@ export default {
       section: this.section,
     });
   },
+
+  updated() {
+    Prism.highlightAll();
+  }
 };
 </script>
