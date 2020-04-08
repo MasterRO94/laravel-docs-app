@@ -10,7 +10,9 @@ export default class Application {
   }
 
   static create(VueApp, bus, ipc) {
-    return Application.$instance = new this(VueApp, bus, ipc);
+    Application.$instance = new this(VueApp, bus, ipc);
+
+    return Application.$instance;
   }
 
   async init() {
@@ -22,6 +24,7 @@ export default class Application {
   }
 
   static get $app() {
+    console.log(Application.$instance);
     return Application.$instance.vueApp;
   }
 

@@ -35,7 +35,7 @@ export default class Kernel {
   }
 
   defineMenu() {
-    AppMenu.defineMenu();
+    AppMenu.defineMenu(this);
   }
 
   createWindow() {
@@ -126,3 +126,6 @@ export default class Kernel {
     }
   }
 }
+
+// In Dev Console
+// require('devtron').install()

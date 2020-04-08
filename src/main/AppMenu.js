@@ -1,7 +1,7 @@
-import { app, Menu, shell } from 'electron';
+import { app, Menu, shell, ipcMain } from 'electron';
 
 export default class AppMenu {
-  static defineMenu() {
+  static defineMenu(kernel) {
     const isMac = process.platform === 'darwin';
 
     const template = [
@@ -21,6 +21,12 @@ export default class AppMenu {
       {
         label: 'File',
         submenu: [
+          {
+            label: 'Fetch Fresh Docs',
+            click: () => {
+              kernel.mainWindow.webContents.send('loadDocs');
+            },
+          },
           isMac ? { role: 'close' } : { role: 'quit' },
         ],
       },

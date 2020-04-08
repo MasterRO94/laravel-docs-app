@@ -6,6 +6,7 @@ import Application from './Application';
 import { ipcRenderer } from 'electron';
 import Loader from '../components/Loader';
 import LoaderFullScreen from '../components/LoaderFullScreen';
+import ProcessBus from './ProcessBus';
 
 export default class Kernel {
   static create() {
@@ -26,6 +27,7 @@ export default class Kernel {
     const bus = new Vue();
 
     window.App = Application.create(VueApp, bus, ipcRenderer);
+    ProcessBus.registerEvents();
 
     window.App.init();
   }
