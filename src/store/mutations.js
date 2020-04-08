@@ -9,6 +9,10 @@ export default {
     state.appLoadingCaption = caption;
   },
 
+  setBackgroundLoading(state, loading) {
+    state.backgroundLoading = loading;
+  },
+
   setCurrentDocsVersion(state, version) {
     state.currentVersion = version;
   },

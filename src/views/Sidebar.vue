@@ -1,7 +1,12 @@
 <template>
   <aside class="sidebar">
     <a href="/" class="logo">
-      <img class="mark" src="/img/logomark.min.svg" alt="Laravel">
+      <loader
+          v-if="loading"
+          width="50px"
+          height="52px"
+      />
+      <img v-else class="mark" src="/img/logomark.min.svg" alt="Laravel">
       <img class="type" src="/img/logotype.min.svg" alt="Laravel">
     </a>
     <nav>
@@ -84,6 +89,10 @@ export default {
 
     docs() {
       return this.$store.state.docs[this.$store.state.currentVersion].sections;
+    },
+
+    loading() {
+      return this.$store.state.backgroundLoading;
     },
   },
 

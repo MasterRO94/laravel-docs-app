@@ -24,7 +24,6 @@ export default class Application {
   }
 
   static get $app() {
-    console.log(Application.$instance);
     return Application.$instance.vueApp;
   }
 

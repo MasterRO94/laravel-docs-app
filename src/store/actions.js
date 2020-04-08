@@ -17,7 +17,9 @@ export default {
       if (docs) {
         commit('setDocs', { version, docs: JSON.parse(docs) });
       } else {
+        commit('setAppLoading', true);
         dispatch('loadDocsForVersion', version);
+        commit('setAppLoading', false);
       }
     }
 
@@ -32,13 +34,13 @@ export default {
   },
 
   async loadDocs({ commit, dispatch }) {
-    commit('setAppLoadingCaption', 'Loading...');
+    commit('setBackgroundLoading', true);
 
     for (const version of Object.keys(Documentation.versions())) {
       await dispatch('loadDocsForVersion', version);
     }
 
-    commit('setAppLoadingCaption', 'All done...');
+    commit('setBackgroundLoading', false);
   },
 
   async loadSections({ commit }, version) {
