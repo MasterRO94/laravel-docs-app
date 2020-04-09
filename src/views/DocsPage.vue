@@ -26,7 +26,7 @@ export default {
     },
 
     content() {
-      return this.page.content;
+      return this.page ? this.page.content : '';
     },
   },
 

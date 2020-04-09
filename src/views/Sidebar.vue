@@ -76,7 +76,7 @@ export default {
 
   created() {
     Application.$bus.$on('currentPageChanged', (currentPage) => {
-      if (!this.sectionOpened(currentPage.section)) {
+      if (currentPage && currentPage.section && !this.sectionOpened(currentPage.section)) {
         this.openSection(currentPage.section);
       }
     });

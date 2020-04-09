@@ -13,6 +13,11 @@ const routes = [
     redirect: `/docs/${store.state.currentVersion}/installation`,
   },
   {
+    path: '/index.html',
+    name: 'index',
+    redirect: `/docs/${store.state.currentVersion}/installation`,
+  },
+  {
     path: '/docs/:version/:page',
     name: 'docsPage',
     component: DocsPage,
@@ -25,7 +30,7 @@ const routes = [
 ];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: process.env.IS_ELECTRON ? 'hash' : 'history',
   base: process.env.BASE_URL,
   linkActiveClass: 'active',
   scrollBehavior() {

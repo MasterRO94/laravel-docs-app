@@ -2,7 +2,7 @@ import Api from '../api/Api';
 import Documentation from '../app/Documentation';
 
 export default {
-  loadState({ commit, dispatch }) {
+  async loadState({ commit, dispatch }) {
     commit('setAppLoadingCaption', 'Loading...');
 
     const defaultDocsVersion = localStorage.getItem('defaultDocsVersion');
@@ -11,26 +11,32 @@ export default {
       commit('setCurrentDocsVersion', defaultDocsVersion);
     }
 
+    if (!localStorage.getItem(`docs.${defaultDocsVersion}`)) {
+      commit('setAppLoading', true);
+    }
+
     for (const version of Object.keys(Documentation.versions())) {
       const docs = localStorage.getItem(`docs.${version}`);
 
       if (docs) {
         commit('setDocs', { version, docs: JSON.parse(docs) });
       } else {
-        commit('setAppLoading', true);
-        dispatch('loadDocsForVersion', version);
-        commit('setAppLoading', false);
+        await dispatch('loadDocsForVersion', version);
       }
     }
 
     commit('setAppLoadingCaption', 'All done...');
   },
 
-  async loadDocsForVersion({ state, dispatch }, version) {
+  async loadDocsForVersion({ state, commit, dispatch }, version) {
+    commit('setAppLoading', true);
+
     await dispatch('loadSections', version);
     await dispatch('loadPages', version);
 
     localStorage.setItem(`docs.${version}`, JSON.stringify(state.docs[version]));
+
+    commit('setAppLoading', false);
   },
 
   async loadDocs({ commit, dispatch }) {

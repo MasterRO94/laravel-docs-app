@@ -1,7 +1,9 @@
 import { app, BrowserWindow, protocol, shell } from 'electron';
 import AppMenu from './AppMenu';
-import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib';
+import { installVueDevtools } from 'vue-cli-plugin-electron-builder/lib';
 import Url from 'url';
+import createProtocol from 'vue-cli-plugin-electron-builder/lib/createProtocol';
+import unhandled from 'electron-unhandled';
 
 export default class Kernel {
   constructor() {
@@ -9,6 +11,7 @@ export default class Kernel {
     // be closed automatically when the JavaScript object is garbage collected.
     this.mainWindow = null;
     this.isDevelopment = process.env.NODE_ENV !== 'production';
+    unhandled();
   }
 
   static create() {
@@ -61,6 +64,8 @@ export default class Kernel {
       // Load the index.html when not in development
       this.mainWindow.loadURL('app://./index.html');
     }
+
+    this.mainWindow.webContents.openDevTools();
 
     this.mainWindow.on('closed', () => {
       this.mainWindow = null;
