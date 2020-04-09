@@ -26,17 +26,14 @@ export default {
     }
 
     commit('setAppLoadingCaption', 'All done...');
+    commit('setAppLoading', false);
   },
 
-  async loadDocsForVersion({ state, commit, dispatch }, version) {
-    commit('setAppLoading', true);
-
+  async loadDocsForVersion({ state, dispatch }, version) {
     await dispatch('loadSections', version);
     await dispatch('loadPages', version);
 
     localStorage.setItem(`docs.${version}`, JSON.stringify(state.docs[version]));
-
-    commit('setAppLoading', false);
   },
 
   async loadDocs({ commit, dispatch }) {
