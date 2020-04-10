@@ -6,5 +6,9 @@ export default class ProcessBus {
     ipcRenderer.on('loadDocs', () => {
       Application.$app.$store.dispatch('loadDocs');
     });
+
+    ipcRenderer.on('message', function(event, text) {
+      Application.$app.$store.commit('setMessage', text);
+    });
   }
 }

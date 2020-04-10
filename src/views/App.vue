@@ -1,5 +1,12 @@
 <template>
   <div id="app">
+    <div
+        v-if="$store.state.message"
+        class="message"
+    >
+      <p v-text="$store.state.message" />
+    </div>
+
     <loader-full-screen
         v-if="$store.state.appLoading"
         :caption="$store.state.appLoadingCaption"
@@ -57,9 +64,11 @@ export default {
   *::-webkit-scrollbar {
     width: 3px;
   }
+
   *::-webkit-scrollbar-track {
     background: transparent;
   }
+
   *::-webkit-scrollbar-thumb {
     background-color: rgba(255, 45, 32, 0.9);
     border-radius: 20%;

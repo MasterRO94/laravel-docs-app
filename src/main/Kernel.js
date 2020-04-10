@@ -5,6 +5,7 @@ import Url from 'url';
 import createProtocol from 'vue-cli-plugin-electron-builder/lib/createProtocol';
 import unhandled from 'electron-unhandled';
 import { autoUpdater } from 'electron-updater';
+import log from 'electron-log';
 
 export default class Kernel {
   constructor() {
@@ -42,6 +43,11 @@ export default class Kernel {
     AppMenu.defineMenu(this);
   }
 
+  sendStatusToWindow(text) {
+    log.info(text);
+    this.mainWindow.webContents.send('message', text);
+  }
+
   createWindow() {
     // Create the browser window.
     this.mainWindow = new BrowserWindow({
@@ -66,7 +72,11 @@ export default class Kernel {
       createProtocol('app');
       // Load the index.html when not in development
       this.mainWindow.loadURL('app://./index.html');
-      autoUpdater.checkForUpdatesAndNotify();
+
+
+      autoUpdater.logger = log;
+      autoUpdater.logger.transports.file.level = 'info';
+      log.info('App starting...');
     }
 
     this.mainWindow.on('closed', () => {
@@ -131,6 +141,33 @@ export default class Kernel {
         });
       }
     }
+
+    autoUpdater.on('checking-for-update', () => {
+      this.sendStatusToWindow('Checking for update...');
+    });
+
+    autoUpdater.on('update-available', (info) => {
+      this.sendStatusToWindow('Update available.');
+    });
+
+    autoUpdater.on('update-not-available', (info) => {
+      this.sendStatusToWindow('Update not available.');
+    });
+
+    autoUpdater.on('error', (err) => {
+      this.sendStatusToWindow(`Error in auto-updater. ${err}`);
+    });
+
+    autoUpdater.on('download-progress', (progressObj) => {
+      let message = 'Download speed: ' + progressObj.bytesPerSecond;
+      message = message + ' - Downloaded ' + progressObj.percent + '%';
+      message = message + ' (' + progressObj.transferred + '/' + progressObj.total + ')';
+      this.sendStatusToWindow(message);
+    });
+
+    autoUpdater.on('update-downloaded', (info) => {
+      this.sendStatusToWindow('Update downloaded.');
+    });
   }
 }
 

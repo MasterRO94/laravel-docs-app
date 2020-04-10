@@ -46,4 +46,8 @@ export default {
       Application.$bus.$emit('currentPageChanged', page);
     }
   },
+
+  setMessage(state, message) {
+    state.message = message;
+  },
 };

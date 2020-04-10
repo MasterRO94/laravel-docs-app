@@ -1,7 +1,7 @@
 {
   "name": "laravel-docs-app",
   "productName": "Laravel Docs App",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "private": true,
   "author": "Roman Ihoshyn <igoshin18@gmail.com>",
   "scripts": {
@@ -17,6 +17,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
+    "electron-log": "^4.1.1",
     "electron-unhandled": "^3.0.2",
     "electron-updater": "^4.2.5",
     "prismjs": "^1.19.0",
