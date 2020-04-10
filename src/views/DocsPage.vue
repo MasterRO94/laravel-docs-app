@@ -1,9 +1,21 @@
 <template>
-  <section
-      class="docs_main"
-      v-if="content"
-      v-html="content"
-  />
+  <div>
+    <section
+        class="docs_main"
+        v-if="content && !contentLoading"
+        v-html="content"
+    />
+    <section
+        v-else
+        class="text-center"
+    >
+      <loader
+          width="100px"
+          height="110px"
+      />
+    </section>
+  </div>
+
 </template>
 
 <script>
@@ -17,12 +29,8 @@ export default {
       return this.$store.state.docs[this.$store.state.currentVersion].pages[this.$route.params.page];
     },
 
-    section() {
-      const [section] = this.$store.state.docs[this.$store.state.currentVersion].sections.filter(
-        sec => sec.links.filter(link => link.page === this.page.page).length,
-      );
-
-      return section;
+    contentLoading() {
+      return this.$store.state.contentLoading;
     },
 
     content() {
@@ -31,14 +39,12 @@ export default {
   },
 
   created() {
-    this.$store.commit('setCurrentPage', {
-      page: this.page,
-      section: this.section,
-    });
+    this.$store.commit('setCurrentPage', this.page);
   },
 
   updated() {
     Prism.highlightAll();
+    this.$store.commit('setCurrentPage', this.page);
   }
 };
 </script>

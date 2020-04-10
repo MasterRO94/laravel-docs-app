@@ -4,6 +4,7 @@ import { installVueDevtools } from 'vue-cli-plugin-electron-builder/lib';
 import Url from 'url';
 import createProtocol from 'vue-cli-plugin-electron-builder/lib/createProtocol';
 import unhandled from 'electron-unhandled';
+import { autoUpdater } from 'electron-updater';
 
 export default class Kernel {
   constructor() {
@@ -46,6 +47,8 @@ export default class Kernel {
     this.mainWindow = new BrowserWindow({
       width: 1200,
       height: 800,
+      minWidth: 400,
+      minHeight: 400,
       webPreferences: {
         nodeIntegration: true,
         webSecurity: false,
@@ -63,6 +66,7 @@ export default class Kernel {
       createProtocol('app');
       // Load the index.html when not in development
       this.mainWindow.loadURL('app://./index.html');
+      autoUpdater.checkForUpdatesAndNotify();
     }
 
     this.mainWindow.webContents.openDevTools();

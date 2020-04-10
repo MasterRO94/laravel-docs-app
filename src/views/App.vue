@@ -45,16 +45,24 @@ export default {
     padding-bottom: 40px;
   }
 
-  /*#nav {*/
-  /*  padding: 30px;*/
-  /*}*/
+  .text-center {
+    text-align: center;
+  }
 
-  /*#nav a {*/
-  /*  font-weight: bold;*/
-  /*  color: #2c3e50;*/
-  /*}*/
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 45, 32, 0.9) transparent;
+  }
 
-  /*#nav a.router-link-exact-active {*/
-  /*  color: #42b983;*/
-  /*}*/
+  *::-webkit-scrollbar {
+    width: 3px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 45, 32, 0.9);
+    border-radius: 20%;
+    border: 1px solid #fc1708;
+  }
 </style>

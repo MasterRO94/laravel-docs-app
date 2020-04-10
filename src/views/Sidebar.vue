@@ -55,8 +55,15 @@
     </nav>
 
     <div class="trigger_contain">
-      <a href="#" class="nav_trigger" aria-label="Menu">
-        <div class="bar"></div>
+      <a
+          href="!#"
+          class="nav_trigger"
+          aria-label="Menu"
+          @click.prevent="toggleNav"
+      >
+        <div
+            :class="['bar', {animate: navOpened}]"
+        />
       </a>
     </div>
   </aside>
@@ -71,6 +78,7 @@ export default {
   data() {
     return {
       expanded: [],
+      navOpened: false,
     };
   },
 
@@ -122,6 +130,30 @@ export default {
     sectionOpened(section) {
       return this.expanded.includes(section.title);
     },
+
+    toggleNav() {
+      this.navOpened = !this.navOpened;
+      document.getElementsByTagName('html')[0].classList.toggle('nav--on');
+    }
   },
 };
 </script>
+
+<style>
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 45, 32, 0.9) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 3px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 45, 32, 0.9);
+    border-radius: 20%;
+    border: 1px solid #fc1708;
+  }
+</style>

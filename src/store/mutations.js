@@ -13,12 +13,23 @@ export default {
     state.backgroundLoading = loading;
   },
 
+  setContentLoading(state, loading) {
+    state.contentLoading = loading;
+  },
+
   setCurrentDocsVersion(state, version) {
     state.currentVersion = version;
   },
 
   setDocs(state, { version, docs }) {
     state.docs[version] = docs;
+  },
+
+  clearDocs(state, version) {
+    state.docs[version] = {
+      sections: [],
+      pages: {},
+    };
   },
 
   setSections(state, { version, sections }) {
@@ -30,7 +41,9 @@ export default {
   },
 
   setCurrentPage(state, page) {
-    state.currentPage = page;
-    Application.$bus.$emit('currentPageChanged', page);
+    if (!state.currentPage || state.currentPage.name !== page.name) {
+      state.currentPage = page;
+      Application.$bus.$emit('currentPageChanged', page);
+    }
   },
 };

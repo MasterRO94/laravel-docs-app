@@ -62,7 +62,9 @@ export default class AppMenu {
         submenu: [
           { role: 'reload' },
           { role: 'forcereload' },
-          // { role: 'toggledevtools' },
+          ...(kernel.isDevelopment ? [
+            { role: 'toggledevtools' }
+          ] : []),
           { type: 'separator' },
           { role: 'resetzoom' },
           { role: 'zoomin' },

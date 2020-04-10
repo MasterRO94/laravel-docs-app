@@ -6,7 +6,7 @@ const docs = {};
 Object.keys(Documentation.versions()).forEach((version) => {
   docs[version] = {
     sections: [],
-    pages: [],
+    pages: {},
   };
 });
 
@@ -14,6 +14,7 @@ export default {
   appLoading: true,
   appLoadingCaption: 'Loading docs...',
   backgroundLoading: false,
+  contentLoading: false,
   currentVersion: config.defaultVersion,
   docs: docs,
   currentPage: null,
