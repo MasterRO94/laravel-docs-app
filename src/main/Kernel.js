@@ -69,8 +69,6 @@ export default class Kernel {
       autoUpdater.checkForUpdatesAndNotify();
     }
 
-    this.mainWindow.webContents.openDevTools();
-
     this.mainWindow.on('closed', () => {
       this.mainWindow = null;
     });
