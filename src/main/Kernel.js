@@ -166,11 +166,11 @@ export default class Kernel {
     });
 
     autoUpdater.on('update-not-available', (info) => {
-      this.sendStatusToWindow('Current version is up-to-date.');
+      this.sendStatusToWindow(`Current version (${info.version}) is up-to-date.`);
 
       dialog.showMessageBox({
         title: 'No Updates',
-        message: 'Current version is up-to-date.',
+        message: `Current version (${info.version}) is up-to-date.`,
       });
 
       this.updaterMenuItem.enabled = true;
