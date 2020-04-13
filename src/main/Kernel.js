@@ -190,7 +190,7 @@ export default class Kernel {
     });
 
     autoUpdater.on('update-downloaded', (info) => {
-      this.sendStatusToWindow('Update downloaded.');
+      this.sendStatusToWindow('Update downloaded. It will be installed after application relaunch.');
     });
   }
 }

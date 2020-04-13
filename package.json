@@ -3,7 +3,7 @@
   "productName": "Laravel Docs App",
   "version": "0.2.9",
   "private": true,
-  "author": "Roman Ihoshyn <igoshin18@gmail.com>",
+  "author": "Laravel LLC and Roman Ihoshyn <igoshin18@gmail.com>",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
