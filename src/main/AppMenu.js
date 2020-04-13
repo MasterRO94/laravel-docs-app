@@ -1,4 +1,5 @@
-import { app, Menu, shell, ipcMain } from 'electron';
+import { app, Menu, dialog, shell, ipcMain } from 'electron';
+import { autoUpdater } from 'electron-updater';
 
 export default class AppMenu {
   static defineMenu(kernel) {
@@ -10,6 +11,14 @@ export default class AppMenu {
         submenu: [
           { role: 'about' },
           { type: 'separator' },
+          {
+            label: 'Check for Updates...',
+            click: (menuItem, focusedWindow, event) => {
+              kernel.updaterMenuItem = menuItem;
+              kernel.updaterMenuItem.enabled = false;
+              autoUpdater.checkForUpdates();
+            },
+          },
           { type: 'separator' },
           { role: 'hide' },
           { role: 'hideothers' },
@@ -77,6 +86,14 @@ export default class AppMenu {
       {
         role: 'help',
         submenu: [
+          ...(!isMac ? [{
+            label: 'Check for Updates...',
+            click: (menuItem, focusedWindow, event) => {
+              kernel.updaterMenuItem = menuItem;
+              kernel.updaterMenuItem.enabled = false;
+              autoUpdater.checkForUpdates();
+            },
+          }] : []),
           {
             label: 'View Web Version',
             click: async () => {

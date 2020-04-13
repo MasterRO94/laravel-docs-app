@@ -1,15 +1,16 @@
 import Api from '../api/Api';
 import Documentation from '../app/Documentation';
-import state from './state';
 
 export default {
-  async loadState({ commit, dispatch }) {
+  async loadState({ state, commit, dispatch }) {
     commit('setAppLoadingCaption', 'Loading...');
 
     const defaultDocsVersion = localStorage.getItem('defaultDocsVersion');
 
     if (defaultDocsVersion) {
       commit('setCurrentDocsVersion', defaultDocsVersion);
+    } else {
+      localStorage.setItem('defaultDocsVersion', state.currentVersion);
     }
 
     if (!localStorage.getItem(`docs.${defaultDocsVersion}`)) {

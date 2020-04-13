@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :key="page.name">
     <section
         class="docs_main"
         v-if="content && !contentLoading"

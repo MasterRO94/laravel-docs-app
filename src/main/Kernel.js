@@ -1,4 +1,4 @@
-import { app, BrowserWindow, protocol, shell } from 'electron';
+import { app, BrowserWindow, dialog, protocol, shell } from 'electron';
 import AppMenu from './AppMenu';
 import { installVueDevtools } from 'vue-cli-plugin-electron-builder/lib';
 import Url from 'url';
@@ -12,6 +12,7 @@ export default class Kernel {
     // Keep a global reference of the window object, if you don't, the window will
     // be closed automatically when the JavaScript object is garbage collected.
     this.mainWindow = null;
+    this.updaterMenuItem = null;
     this.isDevelopment = process.env.NODE_ENV !== 'production';
     unhandled();
   }
@@ -148,10 +149,32 @@ export default class Kernel {
 
     autoUpdater.on('update-available', (info) => {
       this.sendStatusToWindow('Update available.');
+
+      dialog.showMessageBox({
+        type: 'info',
+        title: 'Found Updates',
+        message: 'Found updates, do you want update now?',
+        buttons: ['Sure', 'No'],
+      }, (buttonIndex) => {
+        if (buttonIndex === 0) {
+          autoUpdater.downloadUpdate();
+        } else {
+          this.updaterMenuItem.enabled = true;
+          this.updaterMenuItem = null;
+        }
+      });
     });
 
     autoUpdater.on('update-not-available', (info) => {
-      this.sendStatusToWindow('Update not available.');
+      this.sendStatusToWindow('Current version is up-to-date.');
+
+      dialog.showMessageBox({
+        title: 'No Updates',
+        message: 'Current version is up-to-date.',
+      });
+
+      this.updaterMenuItem.enabled = true;
+      this.updaterMenuItem = null;
     });
 
     autoUpdater.on('error', (err) => {
@@ -159,9 +182,10 @@ export default class Kernel {
     });
 
     autoUpdater.on('download-progress', (progressObj) => {
-      let message = 'Download speed: ' + progressObj.bytesPerSecond;
-      message = message + ' - Downloaded ' + progressObj.percent + '%';
-      message = message + ' (' + progressObj.transferred + '/' + progressObj.total + ')';
+      let message = `Downloading update <strong>${progressObj.percent.toFixed(2)}%</strong>`;
+      message += ` (${Math.round(progressObj.transferred / 1000)}/${Math.round(progressObj.total / 1000)}).`;
+      message += ` Download speed: ${Math.round(progressObj.bytesPerSecond / 1000)} Kb/s.`;
+
       this.sendStatusToWindow(message);
     });
 

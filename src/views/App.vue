@@ -1,12 +1,5 @@
 <template>
   <div id="app">
-    <div
-        v-if="$store.state.message"
-        class="message"
-    >
-      <p v-text="$store.state.message" />
-    </div>
-
     <loader-full-screen
         v-if="$store.state.appLoading"
         :caption="$store.state.appLoadingCaption"
@@ -20,10 +13,14 @@
           <sidebar />
 
           <div class="body_content">
+            <header-message />
+
             <app-header />
 
             <div class="docs_body">
-              <router-view />
+              <transition name="slide-fade">
+                <router-view />
+              </transition>
             </div>
           </div>
         </div>
@@ -35,9 +32,10 @@
 <script>
 import AppHeader from './AppHeader';
 import Sidebar from './Sidebar';
+import HeaderMessage from '../components/HeaderMessage';
 
 export default {
-  components: { Sidebar, AppHeader },
+  components: { Sidebar, AppHeader, HeaderMessage },
 };
 </script>
 
@@ -54,6 +52,25 @@ export default {
 
   .text-center {
     text-align: center;
+  }
+
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+  }
+
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
+  }
+
+  .slide-fade-enter-active {
+    transition: all .3s ease;
+  }
+  .slide-fade-leave-active {
+    transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  }
+  .slide-fade-enter, .slide-fade-leave-to {
+    transform: translateX(10px);
+    opacity: 0;
   }
 
   * {
