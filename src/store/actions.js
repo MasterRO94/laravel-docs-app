@@ -31,7 +31,7 @@ export default {
       }
     }
 
-    commit('setAppLoadingCaption', 'All done...');
+    commit('setAppLoadingCaption', '');
     commit('setAppLoading', false);
   },
 

@@ -1,6 +1,7 @@
 <template>
   <div :key="page.name">
     <section
+        id="docsPageContent"
         class="docs_main"
         v-if="content && !contentLoading"
         v-html="content"
@@ -42,9 +43,31 @@ export default {
     this.$store.commit('setCurrentPage', this.page);
   },
 
+  mounted() {
+    document
+      .getElementById('docsPageContent')
+      .addEventListener('click', this.handleClick);
+  },
+
   updated() {
     Prism.highlightAll();
     this.$store.commit('setCurrentPage', this.page);
-  }
+
+    document
+      .getElementById('docsPageContent')
+      .addEventListener('click', this.handleClick);
+  },
+
+  methods: {
+    handleClick(e) {
+      if (String(e.target.tagName).toLowerCase() === 'a'
+        && !String(e.target.getAttribute('href')).toLowerCase().startsWith('http')
+      ) {
+        e.preventDefault();
+
+        this.$router.push(e.target.getAttribute('href'));
+      }
+    },
+  },
 };
 </script>

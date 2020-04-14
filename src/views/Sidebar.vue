@@ -29,11 +29,11 @@
                   <router-link
                       v-if="!link.uri.startsWith('http')"
                       :key="`${link.title} - ${link.uri}`"
-                      :to="link.uri"
+                      :to="link.uri.replace('#/', '')"
                       tag="li"
                   >
                     <a
-                        :href="`#!${link.uri}`"
+                        :href="`${link.uri}`"
                         v-text="link.title"
                     />
                   </router-link>

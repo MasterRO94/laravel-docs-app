@@ -15,7 +15,7 @@ export default {
 
   computed: {
     message() {
-      return this.$store.state.message;
+      return this.$store.state.message || this.$store.state.appLoadingCaption;
     },
   },
 
