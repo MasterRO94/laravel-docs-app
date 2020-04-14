@@ -60,6 +60,12 @@ export default class Kernel {
         nodeIntegration: true,
         webSecurity: false,
       },
+      titleBarStyle: 'hidden',
+      show: false,
+    });
+
+    this.mainWindow.once('ready-to-show', () => {
+      this.mainWindow.show();
     });
 
     if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -111,6 +117,10 @@ export default class Kernel {
       if (this.mainWindow === null) {
         this.createWindow();
       }
+    });
+
+    process.on('exit', () => {
+      app.quit();
     });
 
     // This method will be called when Electron has finished

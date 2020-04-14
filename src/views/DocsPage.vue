@@ -59,9 +59,10 @@ export default {
   },
 
   methods: {
+    // Navigate all docs related links via vue-router instead of page-reload link following.
     handleClick(e) {
       if (String(e.target.tagName).toLowerCase() === 'a'
-        && !String(e.target.getAttribute('href')).toLowerCase().startsWith('http')
+        && String(e.target.getAttribute('href')).toLowerCase().startsWith('/docs')
       ) {
         e.preventDefault();
 

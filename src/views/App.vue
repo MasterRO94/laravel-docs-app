@@ -46,6 +46,10 @@ export default {
     min-height: 600px;
   }
 
+  #app .body_content {
+    padding-top: 1.25rem;
+  }
+
   .sidebar {
     padding-bottom: 40px;
   }
