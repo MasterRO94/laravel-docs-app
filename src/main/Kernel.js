@@ -15,6 +15,7 @@ export default class Kernel {
     this.updaterMenuItem = null;
     this.isDevelopment = process.env.NODE_ENV !== 'production';
     unhandled();
+    autoUpdater.autoDownload = false;
   }
 
   static create() {
@@ -66,6 +67,11 @@ export default class Kernel {
 
     this.mainWindow.once('ready-to-show', () => {
       this.mainWindow.show();
+    });
+
+    this.mainWindow.flashFrame(true);
+    this.mainWindow.once('focus', () => {
+      this.mainWindow.flashFrame(false);
     });
 
     if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -136,6 +142,8 @@ export default class Kernel {
       }
 
       this.createWindow();
+
+      autoUpdater.checkForUpdates();
     });
 
     // Exit cleanly on request from parent process in development mode.
@@ -189,6 +197,9 @@ export default class Kernel {
 
     autoUpdater.on('error', (err) => {
       this.sendStatusToWindow(`Error in auto-updater. ${err}`);
+
+      this.updaterMenuItem.enabled = true;
+      this.updaterMenuItem = null;
     });
 
     autoUpdater.on('download-progress', (progressObj) => {
