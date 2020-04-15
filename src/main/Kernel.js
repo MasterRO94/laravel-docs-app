@@ -66,8 +66,13 @@ export default class Kernel {
       show: false,
     });
 
-    this.mainWindow.once('ready-to-show', () => {
+    this.mainWindow.once('ready-to-show', async () => {
       this.mainWindow.show();
+
+      setTimeout(async () => {
+        await autoUpdater.checkForUpdates();
+        this.showUpdaterNotification = true;
+      }, 3000);
     });
 
     this.mainWindow.flashFrame(true);
@@ -143,9 +148,6 @@ export default class Kernel {
       }
 
       this.createWindow();
-
-      await autoUpdater.checkForUpdates();
-      this.showUpdaterNotification = true;
     });
 
     // Exit cleanly on request from parent process in development mode.
