@@ -13,7 +13,7 @@ module.exports = {
           title: '${productName} ${version}',
         },
         linux: {
-          target: ['AppImage', 'deb', 'pacman', 'apk', 'tar.gz'],
+          target: ['AppImage', 'deb', 'pacman', 'apk', 'rpm', 'tar.gz'],
         },
       },
     },

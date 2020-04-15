@@ -16,6 +16,7 @@ export default class Kernel {
     this.isDevelopment = process.env.NODE_ENV !== 'production';
     unhandled();
     autoUpdater.autoDownload = false;
+    this.showUpdaterNotification = false;
   }
 
   static create() {
@@ -88,7 +89,7 @@ export default class Kernel {
 
 
       autoUpdater.logger = log;
-      autoUpdater.logger.transports.file.level = 'info';
+      autoUpdater.logger.transports.file.level = 'debug';
       log.info('App starting...');
     }
 
@@ -143,7 +144,8 @@ export default class Kernel {
 
       this.createWindow();
 
-      autoUpdater.checkForUpdates();
+      await autoUpdater.checkForUpdates();
+      this.showUpdaterNotification = true;
     });
 
     // Exit cleanly on request from parent process in development mode.
@@ -162,7 +164,9 @@ export default class Kernel {
     }
 
     autoUpdater.on('checking-for-update', () => {
-      this.sendStatusToWindow('Checking for update...');
+      if (this.showUpdaterNotification) {
+        this.sendStatusToWindow('Checking for update...');
+      }
     });
 
     autoUpdater.on('update-available', (info) => {
@@ -176,7 +180,7 @@ export default class Kernel {
       }, (buttonIndex) => {
         if (buttonIndex === 0) {
           autoUpdater.downloadUpdate();
-        } else {
+        } else if (this.updaterMenuItem) {
           this.updaterMenuItem.enabled = true;
           this.updaterMenuItem = null;
         }
@@ -184,22 +188,28 @@ export default class Kernel {
     });
 
     autoUpdater.on('update-not-available', (info) => {
-      this.sendStatusToWindow(`Current version (${info.version}) is up-to-date.`);
+      if (this.showUpdaterNotification) {
+        this.sendStatusToWindow(`Current version (${info.version}) is up-to-date.`);
 
-      dialog.showMessageBox({
-        title: 'No Updates',
-        message: `Current version (${info.version}) is up-to-date.`,
-      });
+        dialog.showMessageBox({
+          title: 'No Updates',
+          message: `Current version (${info.version}) is up-to-date.`,
+        });
+      }
 
-      this.updaterMenuItem.enabled = true;
-      this.updaterMenuItem = null;
+      if (this.updaterMenuItem) {
+        this.updaterMenuItem.enabled = true;
+        this.updaterMenuItem = null;
+      }
     });
 
     autoUpdater.on('error', (err) => {
       this.sendStatusToWindow(`Error in auto-updater. ${err}`);
 
-      this.updaterMenuItem.enabled = true;
-      this.updaterMenuItem = null;
+      if (this.updaterMenuItem) {
+        this.updaterMenuItem.enabled = true;
+        this.updaterMenuItem = null;
+      }
     });
 
     autoUpdater.on('download-progress', (progressObj) => {
