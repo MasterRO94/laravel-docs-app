@@ -1,12 +1,10 @@
-import { app, Menu, dialog, shell, ipcMain } from 'electron';
+import { app, Menu, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 
 export default class AppMenu {
   static defineMenu(kernel) {
-    const isMac = process.platform === 'darwin';
-
     const template = [
-      ...(isMac ? [{
+      ...(kernel.isMac ? [{
         label: app.name,
         submenu: [
           { role: 'about' },
@@ -36,7 +34,7 @@ export default class AppMenu {
               kernel.mainWindow.webContents.send('loadDocs');
             },
           },
-          isMac ? { role: 'close' } : { role: 'quit' },
+          kernel.isMac ? { role: 'close' } : { role: 'quit' },
         ],
       },
       {
@@ -48,7 +46,7 @@ export default class AppMenu {
           { role: 'cut' },
           { role: 'copy' },
           { role: 'paste' },
-          ...(isMac ? [
+          ...(kernel.isMac ? [
             { role: 'delete' },
             { role: 'selectAll' },
             { type: 'separator' },
@@ -72,7 +70,7 @@ export default class AppMenu {
           { role: 'reload' },
           { role: 'forcereload' },
           ...(kernel.isDevelopment ? [
-            { role: 'toggledevtools' }
+            { role: 'toggledevtools' },
           ] : []),
           { type: 'separator' },
           { role: 'resetzoom' },
@@ -86,7 +84,7 @@ export default class AppMenu {
       {
         role: 'help',
         submenu: [
-          ...(!isMac ? [{
+          ...(kernel.isWindows() ? [{
             label: 'Check for Updates...',
             click: (menuItem, focusedWindow, event) => {
               kernel.updaterMenuItem = menuItem;

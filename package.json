@@ -1,7 +1,7 @@
 {
   "name": "laravel-docs-app",
   "productName": "Laravel Docs App",
-  "version": "0.2.17",
+  "version": "0.2.18",
   "private": true,
   "author": "Laravel LLC and Roman Ihoshyn <igoshin18@gmail.com>",
   "scripts": {

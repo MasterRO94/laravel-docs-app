@@ -177,12 +177,16 @@ export default class Kernel {
       const response = await dialog.showMessageBoxSync({
         type: 'info',
         title: 'Found Updates',
-        message: 'Found updates, do you want update now?',
+        message: 'Found updates, do you want to update now?',
         buttons: ['Sure', 'No'],
       });
 
       if (response === 0) {
         autoUpdater.downloadUpdate();
+
+        if (this.isWindows()) {
+          this.sendStatusToWindow('Update downloading started. It will be downloaded in the background.');
+        }
       } else if (this.updaterMenuItem) {
         this.updaterMenuItem.enabled = true;
         this.updaterMenuItem = null;
@@ -222,9 +226,32 @@ export default class Kernel {
       this.sendStatusToWindow(message);
     });
 
-    autoUpdater.on('update-downloaded', (info) => {
+    autoUpdater.on('update-downloaded', async (info) => {
       this.sendStatusToWindow('Update downloaded. It will be installed after application relaunch.');
+
+      const response = await dialog.showMessageBoxSync({
+        type: 'info',
+        title: 'Update downloaded',
+        message: 'Do you want to update now?',
+        buttons: ['Sure', 'No'],
+      });
+
+      if (response === 0) {
+        autoUpdater.quitAndInstall();
+      }
     });
+  }
+
+  isMac() {
+    return 'darwin' === process.platform;
+  }
+
+  isWindows() {
+    return 'win32' === process.platform;
+  }
+
+  isLinux() {
+    return 'linux' === process.platform;
   }
 }
 
