@@ -1,6 +1,6 @@
 <template>
   <aside class="sidebar">
-    <a href="/" class="logo">
+    <router-link to="/" class="logo">
       <loader
           v-if="loading"
           width="50px"
@@ -8,7 +8,7 @@
       />
       <img v-else class="mark" src="/img/logomark.min.svg" alt="Laravel">
       <img class="type" src="/img/logotype.min.svg" alt="Laravel">
-    </a>
+    </router-link>
     <nav>
       <div class="navigation_contain" style="display: block;">
         <div class="docs_sidebar">
