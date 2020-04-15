@@ -169,22 +169,22 @@ export default class Kernel {
       }
     });
 
-    autoUpdater.on('update-available', (info) => {
+    autoUpdater.on('update-available', async (info) => {
       this.sendStatusToWindow('Update available.');
 
-      dialog.showMessageBox({
+      const response = await dialog.showMessageBoxSync({
         type: 'info',
         title: 'Found Updates',
         message: 'Found updates, do you want update now?',
         buttons: ['Sure', 'No'],
-      }, (buttonIndex) => {
-        if (buttonIndex === 0) {
-          autoUpdater.downloadUpdate();
-        } else if (this.updaterMenuItem) {
-          this.updaterMenuItem.enabled = true;
-          this.updaterMenuItem = null;
-        }
       });
+
+      if (response === 0) {
+        autoUpdater.downloadUpdate();
+      } else if (this.updaterMenuItem) {
+        this.updaterMenuItem.enabled = true;
+        this.updaterMenuItem = null;
+      }
     });
 
     autoUpdater.on('update-not-available', (info) => {
