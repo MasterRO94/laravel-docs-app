@@ -17,6 +17,14 @@ export default class Updater {
     autoUpdater.logger = log;
     autoUpdater.logger.transports.file.level = 'info';
 
+    this.registerEvents();
+
+    if (this.kernel.isWindows()) {
+      this.handleWindowsUpdateDownloadProgress();
+    }
+  }
+
+  registerEvents() {
     autoUpdater.on('checking-for-update', () => {
       if (this.showNotification) {
         this.kernel.sendStatusToWindow('checking-for-update', 'Checking for update...');
@@ -67,6 +75,8 @@ export default class Updater {
     autoUpdater.on('error', (err) => {
       this.kernel.sendStatusToWindow('error', `Error in auto-updater. ${err}`);
 
+      this.kernel.mainWindow.setProgressBar(-1);
+
       if (this.updaterMenuItem) {
         this.updaterMenuItem.enabled = true;
         this.updaterMenuItem = null;
@@ -82,8 +92,10 @@ export default class Updater {
     autoUpdater.on('update-downloaded', async (info) => {
       this.kernel.sendStatusToWindow(
         'update-downloaded',
-        'Update downloaded. It will be installed after application relaunch.'
+        'Update downloaded. It will be installed after application relaunch.',
       );
+
+      this.kernel.mainWindow.setProgressBar(2);
 
       const response = await dialog.showMessageBoxSync({
         type: 'info',
@@ -95,11 +107,9 @@ export default class Updater {
       if (response === 0) {
         autoUpdater.quitAndInstall();
       }
-    });
 
-    if (this.kernel.isWindows()) {
-      this.handleWindowsUpdateDownloadProgress();
-    }
+      this.kernel.mainWindow.setProgressBar(-1);
+    });
   }
 
   checkForUpdates() {
@@ -114,6 +124,8 @@ export default class Updater {
     message += ` (${Math.round(progress.transferred / 1000)}/${Math.round(progress.total / 1000)}).`;
     message += ` Download speed: ${Math.round(progress.bytesPerSecond / 1000)} Kb/s.`;
 
+    this.kernel.mainWindow.setProgressBar(progress.percent / 100);
+
     return message;
   }
 
@@ -122,13 +134,13 @@ export default class Updater {
       percent: 0,
       bytesPerSecond: 0,
       total: 0,
-      transferred: 0
+      transferred: 0,
     };
 
     let diffDownHelper = {
       startTime: 0,
       lastTime: 0,
-      lastSize: 0
+      lastSize: 0,
     };
 
     log.hooks.push((message, transport) => {
@@ -137,7 +149,7 @@ export default class Updater {
       }
 
       let match = /Full: ([\d\,\.]+) ([GMKB]+), To download: ([\d\,\.]+) ([GMKB]+)/.exec(
-        message.data[0]
+        message.data[0],
       );
 
       if (match) {
@@ -150,13 +162,13 @@ export default class Updater {
           percent: 0,
           bytesPerSecond: 0,
           total: Number(match[3].split(',').join('')) * multiplier,
-          transferred: 0
+          transferred: 0,
         };
 
         diffDownHelper = {
           startTime: Date.now(),
           lastTime: Date.now(),
-          lastSize: 0
+          lastSize: 0,
         };
 
         return message;
@@ -170,7 +182,7 @@ export default class Updater {
 
         diffDown.transferred += diffDownHelper.lastSize;
         diffDown.bytesPerSecond = Math.floor(
-          (diffDown.transferred * 1000) / deltaTime
+          (diffDown.transferred * 1000) / deltaTime,
         );
         diffDown.percent = (diffDown.transferred * 100) / diffDown.total;
 
