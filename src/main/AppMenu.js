@@ -4,7 +4,7 @@ import { autoUpdater } from 'electron-updater';
 export default class AppMenu {
   static defineMenu(kernel) {
     const template = [
-      ...(kernel.isMac ? [{
+      ...(kernel.isMac() ? [{
         label: app.name,
         submenu: [
           { role: 'about' },
@@ -34,7 +34,7 @@ export default class AppMenu {
               kernel.mainWindow.webContents.send('loadDocs');
             },
           },
-          kernel.isMac ? { role: 'close' } : { role: 'quit' },
+          kernel.isMac() ? { role: 'close' } : { role: 'quit' },
         ],
       },
       {
@@ -46,7 +46,7 @@ export default class AppMenu {
           { role: 'cut' },
           { role: 'copy' },
           { role: 'paste' },
-          ...(kernel.isMac ? [
+          ...(kernel.isMac() ? [
             { role: 'delete' },
             { role: 'selectAll' },
             { type: 'separator' },
