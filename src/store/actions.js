@@ -49,6 +49,7 @@ export default {
       await dispatch('loadDocsForVersion', version);
     }
 
+    commit('setAppLoadingCaption', '');
     commit('setBackgroundLoading', false);
   },
 

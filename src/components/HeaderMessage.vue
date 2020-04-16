@@ -2,9 +2,9 @@
   <transition name="fade">
     <div
         v-if="show"
-        class="head_message"
+        :class="['head_message', `message-${this.message.event}`]"
     >
-      <p v-html="message" />
+      <p v-html="message.message" />
     </div>
   </transition>
 </template>
@@ -15,20 +15,46 @@ export default {
 
   computed: {
     message() {
-      return this.$store.state.message || this.$store.state.appLoadingCaption;
+      return this.$store.state.messageFromMain.message
+        ? this.$store.state.messageFromMain
+        : {
+          event: 'app-loading',
+          message: this.$store.state.appLoadingCaption,
+        };
+    },
+
+    timeoutTime() {
+      if (!this.message || !this.message.event) {
+        return 10000;
+      }
+
+      switch (this.message.event) {
+        case 'message':
+        case 'checking-for-update':
+        case 'update-available':
+        case 'update-not-available':
+        case 'update-downloaded':
+          return 5000;
+        case 'download-progress':
+          return 10000;
+        case 'app-loading':
+          return 20000;
+        default:
+          return 10000;
+      }
     },
   },
 
   watch: {
     message() {
-      if(this.message) {
+      if (this.message && this.message.message) {
         this.show = true;
 
         clearTimeout(this.timeoutId);
 
         this.timeoutId = setTimeout(() => {
           this.show = false;
-        }, 10000);
+        }, this.timeoutTime);
       } else {
         this.show = false;
       }

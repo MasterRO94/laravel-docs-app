@@ -1,11 +1,11 @@
-import { app, BrowserWindow, dialog, protocol, shell } from 'electron';
+import { app, BrowserWindow, protocol, shell } from 'electron';
 import AppMenu from './AppMenu';
 import { installVueDevtools } from 'vue-cli-plugin-electron-builder/lib';
 import Url from 'url';
 import createProtocol from 'vue-cli-plugin-electron-builder/lib/createProtocol';
 import unhandled from 'electron-unhandled';
-import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import Updater from './Updater';
 
 export default class Kernel {
   constructor() {
@@ -15,8 +15,7 @@ export default class Kernel {
     this.updaterMenuItem = null;
     this.isDevelopment = process.env.NODE_ENV !== 'production';
     unhandled();
-    autoUpdater.autoDownload = false;
-    this.showUpdaterNotification = false;
+    this.updater = Updater.create(this);
   }
 
   static create() {
@@ -27,6 +26,7 @@ export default class Kernel {
     this.registerSchemesAsPrivileged();
     this.defineMenu();
     this.registerAppEvents();
+    this.updater.init();
   }
 
   registerSchemesAsPrivileged() {
@@ -46,9 +46,14 @@ export default class Kernel {
     AppMenu.defineMenu(this);
   }
 
-  sendStatusToWindow(text) {
-    log.info(text);
-    this.mainWindow.webContents.send('message', text);
+  sendStatusToWindow(channel, message) {
+    if (!message) {
+      message = channel;
+      channel = 'message';
+    }
+
+    log.info(`${channel}: ${message}`);
+    this.mainWindow.webContents.send(channel, message);
   }
 
   createWindow() {
@@ -68,11 +73,7 @@ export default class Kernel {
 
     this.mainWindow.once('ready-to-show', async () => {
       this.mainWindow.show();
-
-      setTimeout(async () => {
-        await autoUpdater.checkForUpdates();
-        this.showUpdaterNotification = true;
-      }, 3000);
+      await this.updater.checkForUpdates();
     });
 
     this.mainWindow.flashFrame(true);
@@ -91,10 +92,6 @@ export default class Kernel {
       createProtocol('app');
       // Load the index.html when not in development
       this.mainWindow.loadURL('app://./index.html');
-
-
-      autoUpdater.logger = log;
-      autoUpdater.logger.transports.file.level = 'debug';
       log.info('App starting...');
     }
 
@@ -165,81 +162,7 @@ export default class Kernel {
       }
     }
 
-    autoUpdater.on('checking-for-update', () => {
-      if (this.showUpdaterNotification) {
-        this.sendStatusToWindow('Checking for update...');
-      }
-    });
 
-    autoUpdater.on('update-available', async (info) => {
-      this.sendStatusToWindow('Update available.');
-
-      const response = await dialog.showMessageBoxSync({
-        type: 'info',
-        title: 'Found Updates',
-        message: 'Found updates, do you want to update now?',
-        buttons: ['Sure', 'No'],
-      });
-
-      if (response === 0) {
-        autoUpdater.downloadUpdate();
-
-        if (this.isWindows()) {
-          this.sendStatusToWindow('Update downloading started. It will be downloaded in the background.');
-        }
-      } else if (this.updaterMenuItem) {
-        this.updaterMenuItem.enabled = true;
-        this.updaterMenuItem = null;
-      }
-    });
-
-    autoUpdater.on('update-not-available', (info) => {
-      if (this.showUpdaterNotification) {
-        this.sendStatusToWindow(`Current version (${info.version}) is up-to-date.`);
-
-        dialog.showMessageBox({
-          title: 'No Updates',
-          message: `Current version (${info.version}) is up-to-date.`,
-        });
-      }
-
-      if (this.updaterMenuItem) {
-        this.updaterMenuItem.enabled = true;
-        this.updaterMenuItem = null;
-      }
-    });
-
-    autoUpdater.on('error', (err) => {
-      this.sendStatusToWindow(`Error in auto-updater. ${err}`);
-
-      if (this.updaterMenuItem) {
-        this.updaterMenuItem.enabled = true;
-        this.updaterMenuItem = null;
-      }
-    });
-
-    autoUpdater.on('download-progress', (progressObj) => {
-      let message = `Downloading update <strong>${progressObj.percent.toFixed(2)}%</strong>`;
-      message += ` (${Math.round(progressObj.transferred / 1000)}/${Math.round(progressObj.total / 1000)}).`;
-      message += ` Download speed: ${Math.round(progressObj.bytesPerSecond / 1000)} Kb/s.`;
-
-      this.sendStatusToWindow(message);
-    });
-
-    autoUpdater.on('update-downloaded', async (info) => {
-      this.sendStatusToWindow('Update downloaded. It will be installed after application relaunch.');
-
-      const response = await dialog.showMessageBoxSync({
-        type: 'info',
-        title: 'Update downloaded',
-        message: 'Do you want to update now?',
-        buttons: ['Sure', 'No'],
-      });
-
-      if (response === 0) {
-        autoUpdater.quitAndInstall();
-      }
-    });
   }
 
   isMac() {

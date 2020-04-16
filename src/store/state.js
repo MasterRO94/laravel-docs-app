@@ -18,5 +18,5 @@ export default {
   currentVersion: config.defaultVersion,
   docs: docs,
   currentPage: null,
-  message: '',
+  messageFromMain: {},
 };

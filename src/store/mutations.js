@@ -47,7 +47,7 @@ export default {
     }
   },
 
-  setMessage(state, message) {
-    state.message = message;
+  setMessage(state, { event, message }) {
+    state.messageFromMain = { event, message };
   },
 };

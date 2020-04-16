@@ -7,8 +7,20 @@ export default class ProcessBus {
       Application.$app.$store.dispatch('loadDocs');
     });
 
-    ipcRenderer.on('message', function(event, text) {
-      Application.$app.$store.commit('setMessage', text);
+    [
+      'message',
+      'error',
+      'checking-for-update',
+      'update-available',
+      'update-not-available',
+      'update-downloaded',
+      'download-progress',
+    ].forEach((event) => {
+      ipcRenderer.on(event, function (event, message) {
+        Application.$app.$store.commit('setMessage', { event, message });
+      });
     });
   }
 }
+
+// 'update-available', 'checking-for-update', 'update-not-available', 'update-downloaded', 'download-progress'
