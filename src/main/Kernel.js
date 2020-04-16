@@ -23,10 +23,16 @@ export default class Kernel {
   }
 
   init() {
-    this.registerSchemesAsPrivileged();
-    this.defineMenu();
-    this.registerAppEvents();
-    this.updater.init();
+    const gotTheLock = app.requestSingleInstanceLock();
+
+    if (!gotTheLock) {
+      app.quit();
+    } else {
+      this.registerSchemesAsPrivileged();
+      this.defineMenu();
+      this.registerAppEvents();
+      this.updater.init();
+    }
   }
 
   registerSchemesAsPrivileged() {
@@ -78,7 +84,9 @@ export default class Kernel {
 
     this.mainWindow.flashFrame(true);
     this.mainWindow.once('focus', () => {
-      this.mainWindow.flashFrame(false);
+      setTimeout(() => {
+        this.mainWindow.flashFrame(false);
+      }, 3000);
     });
 
     if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -130,6 +138,16 @@ export default class Kernel {
 
     process.on('exit', () => {
       app.quit();
+    });
+
+    app.on('second-instance', (event, commandLine, workingDirectory) => {
+      if (this.mainWindow) {
+        if (this.mainWindow.isMinimized()) {
+          this.mainWindow.restore();
+        }
+
+        this.mainWindow.focus();
+      }
     });
 
     // This method will be called when Electron has finished
