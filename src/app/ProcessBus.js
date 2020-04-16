@@ -22,5 +22,3 @@ export default class ProcessBus {
     });
   }
 }
-
-// 'update-available', 'checking-for-update', 'update-not-available', 'update-downloaded', 'download-progress'

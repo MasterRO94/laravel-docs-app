@@ -38,7 +38,7 @@ export default {
         case 'download-progress':
           return 10000;
         case 'app-loading':
-          return 20000;
+          return 180000;
         default:
           return 10000;
       }
