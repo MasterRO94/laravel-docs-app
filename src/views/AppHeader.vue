@@ -20,40 +20,19 @@
         </div>
       </div>
     </div>
-    <div class="search_contain">
-      <div class="input_group search icon">
-        <span class="twitter-typeahead" style="position: relative; display: inline-block; direction: ltr;">
-          <input type="text"
-                 id="search-docs-input"
-                 placeholder="Search Docs (In upcoming release)"
-                 class="search_input tt-input"
-                 aria-label="Search in the documentation"
-                 autocomplete="off"
-                 spellcheck="false"
-                 dir="auto"
-                 style="position: relative; vertical-align: top;"
-          >
-          <pre aria-hidden="true"
-               style="position: absolute; visibility: hidden; white-space: pre; font-family: scandia-web, sans-serif; font-size: 16px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0.5px; text-indent: 0px; text-rendering: auto; text-transform: none;"
-               data-initialized="true"
-          />
-          <span class="tt-dropdown-menu"
-                style="position: absolute; top: 100%; z-index: 100; display: none; left: 0px; right: auto;"
-          >
-            <div class="tt-dataset-0" />
-          </span>
-        </span>
-        <input type="submit" class="search_submit icon_display">
-      </div>
-    </div>
+
+    <search />
   </header>
 </template>
 
 <script>
 import Documentation from '../app/Documentation';
+import Search from '../components/Search';
 
 export default {
   name: 'AppHeader',
+
+  components: { Search },
 
   created() {
     this.versions = Documentation.versions();
