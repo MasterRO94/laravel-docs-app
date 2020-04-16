@@ -86,6 +86,10 @@ export default {
     font-size: 0.8rem;
   }
 
+  .head_message p strong {
+    font-weight: bold;
+  }
+
   .head_message + .docs_actions {
     margin-top: 30px;
   }

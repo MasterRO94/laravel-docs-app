@@ -65,8 +65,8 @@ export default class Kernel {
   createWindow() {
     // Create the browser window.
     this.mainWindow = new BrowserWindow({
-      width: 1200,
-      height: 800,
+      width: 1250,
+      height: 850,
       minWidth: 400,
       minHeight: 400,
       webPreferences: {
