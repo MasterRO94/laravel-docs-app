@@ -8,6 +8,10 @@
       />
       <img v-else class="mark" src="/img/logomark.min.svg" alt="Laravel">
       <img class="type" src="/img/logotype.min.svg" alt="Laravel">
+
+      <span class="beta_badge">
+        Beta
+      </span>
     </router-link>
     <nav>
       <div class="navigation_contain" style="display: block;">

@@ -77,6 +77,29 @@ export default {
     cursor: pointer;
   }
 
+  .beta_badge {
+    transition: ease all .3s;
+    color: #fc1708;
+    position: absolute;
+    top: 30px;
+    right: 25px;
+    font-weight: 100;
+  }
+
+  @media all and (max-width: 1039px) {
+    .beta_badge {
+      top: auto;
+      bottom: 0;
+      left: 15px;
+    }
+  }
+
+  .nav--on .beta_badge {
+    top: 30px;
+    right: 10px;
+    left: auto;
+  }
+
   .fade-enter-active, .fade-leave-active {
     transition: opacity .5s;
   }
