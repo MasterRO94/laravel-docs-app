@@ -33,7 +33,11 @@ const router = new VueRouter({
   mode: process.env.IS_ELECTRON ? 'hash' : 'history',
   base: process.env.BASE_URL,
   linkActiveClass: 'active',
-  scrollBehavior() {
+  scrollBehavior(to) {
+    if (to.hash) {
+      return { selector: to.hash };
+    }
+
     return {
       x: 0,
       y: 0,

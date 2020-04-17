@@ -15,6 +15,16 @@
           height="110px"
       />
     </section>
+
+    <transition name="fade">
+      <img
+          v-show="enabledScrollToTop"
+          class="back_to_top_arrow"
+          src="/img/up-arrow.svg"
+          alt="Back to top"
+          @click="toTop"
+      />
+    </transition>
   </div>
 
 </template>
@@ -39,6 +49,12 @@ export default {
     },
   },
 
+  data() {
+    return {
+      enabledScrollToTop: false,
+    };
+  },
+
   created() {
     this.$store.commit('setCurrentPage', this.page);
   },
@@ -47,6 +63,18 @@ export default {
     document
       .getElementById('docsPageContent')
       .addEventListener('click', this.handleClick);
+
+    if (this.$route.hash) {
+      setTimeout(() => {
+        window.location.href = this.$route.hash;
+      }, 1);
+    }
+
+    setTimeout(() => {
+      this.enabledScrollToTop = window.scrollY > 50;
+    }, 100);
+
+    document.addEventListener('scroll', this.onscroll)
   },
 
   updated() {
@@ -69,6 +97,14 @@ export default {
         this.$router.push(e.target.getAttribute('href'));
       }
     },
+
+    toTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+
+    onscroll() {
+      this.enabledScrollToTop = window.scrollY > 50;
+    }
   },
 };
 </script>

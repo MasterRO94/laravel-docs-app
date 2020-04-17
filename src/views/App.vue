@@ -50,12 +50,28 @@ export default {
     padding-top: 1.25rem;
   }
 
+  #app .docs_actions {
+    margin-bottom: 2.5em;
+  }
+
+  #app .layout_transparent {
+    opacity: 0.1;
+  }
+
   .sidebar {
     padding-bottom: 40px;
   }
 
   .text-center {
     text-align: center;
+  }
+
+  .back_to_top_arrow {
+    position: fixed;
+    bottom: 1%;
+    right: 1%;
+    width: 48px;
+    cursor: pointer;
   }
 
   .fade-enter-active, .fade-leave-active {
@@ -74,6 +90,13 @@ export default {
   }
   .slide-fade-enter, .slide-fade-leave-to {
     transform: translateX(10px);
+    opacity: 0;
+  }
+
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+  }
+  .fade-enter, .fade-leave-to {
     opacity: 0;
   }
 

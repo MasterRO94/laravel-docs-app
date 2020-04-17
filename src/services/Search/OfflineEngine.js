@@ -5,10 +5,8 @@ export default class OfflineEngine {
   search(term) {
     this.prepare(term);
 
-    console.log(this.pages);
-
     Object.values(this.pages).forEach((page) => {
-      this.exactPageTitleMatch(page);
+      this.pageTitleMatch(page);
       this.pageLinksMatch(page);
     });
 
@@ -31,30 +29,39 @@ export default class OfflineEngine {
     this.searchResults = [];
   }
 
-  createSearchResult() {
-    return new SearchResultItem();
-  }
+  createSearchResult(page) {
+    const result = new SearchResultItem();
 
-  exactPageTitleMatch(page) {
-    if (page.h1.toLowerCase() !== this.term) {
-      return;
-    }
-
-    const result = this.createSearchResult();
-    result.score += 10;
+    result.sectionTitle = page.section.title;
     result.pageName = page.name;
     result.title = page.h1;
     result.uri = page.link.uri;
 
-    this.searchResults.push(result);
+    return result;
+  }
+
+  pageTitleMatch(page) {
+    const result = this.createSearchResult(page);
+
+    if (page.h1.toLowerCase() === this.term) {
+      result.score += 15;
+    } else if (page.h1.toLowerCase().startsWith(this.term)) {
+      result.score += 0.6 * this.term.length;
+    }
+
+    if (page.links.length) {
+      result.description = page.links[0].title;
+      result.uri += page.links[0].uri;
+    }
+
+    if (result.score > 0) {
+      this.searchResults.push(result);
+    }
   }
 
   pageLinksMatch(page) {
     page.links.forEach((link) => {
-      const result = this.createSearchResult();
-      result.pageName = page.name;
-      result.title = page.h1;
-      result.description = link.title;
+      const result = this.createSearchResult(page);
       result.uri = `${page.link.uri}${link.uri}`;
 
       if (link.title.toLowerCase() === this.term) {
@@ -62,18 +69,31 @@ export default class OfflineEngine {
       } else {
         const termWords = this.term.split(' ').map(w => w.toLowerCase());
 
-        link.tokens.map(t => t.toLowerCase()).forEach((token) => {
-          termWords.forEach((termWord) => {
+        termWords.forEach((termWord) => {
+          link.tokens.map(t => t.toLowerCase()).forEach((token) => {
             if (termWord === token && termWord.length > 2) {
               result.score += termWord.length / 10 * 1.5;
+            } else if (token.startsWith(termWord)) {
+              result.score += termWord.length / 5;
             } else if (token.includes(termWord)) {
               result.score += termWord.length / 10;
+            }
+          });
+
+          link.stemmedTokens.map(t => t.toLowerCase()).forEach((token) => {
+            if (termWord === token && termWord.length > 2) {
+              result.score += termWord.length / 10 * 1.2;
+            } else if (token.startsWith(termWord)) {
+              result.score += termWord.length / 7;
+            } else if (token.includes(termWord)) {
+              result.score += termWord.length / 12;
             }
           });
         });
       }
 
       if (result.score > 0) {
+        result.description = link.title;
         this.searchResults.push(result);
       }
     });
