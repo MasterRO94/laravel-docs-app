@@ -11,7 +11,7 @@ export default class OfflineEngine {
       this.pageContentMatch(page);
     });
 
-    const result = Object.values(this.searchResults).sort((a, b) => {
+    return Object.values(this.searchResults).sort((a, b) => {
       if (a.score > b.score) {
         return -1;
       }
@@ -22,10 +22,6 @@ export default class OfflineEngine {
 
       return 0;
     }).slice(0, 100);
-
-    console.log(result);
-
-    return result;
   }
 
   prepare(term) {
