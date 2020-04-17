@@ -34,4 +34,8 @@ export default class Application {
   static get $ipc() {
     return Application.$instance.ipc;
   }
+
+  static get $store() {
+    return Application.$instance.vueApp.$store;
+  }
 }
