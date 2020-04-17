@@ -8,7 +8,8 @@ export default class OfflineEngine {
     Object.values(this.pages).forEach((page) => {
       this.pageTitleMatch(page);
       this.pageLinksMatch(page);
-      this.pageContentMatch(page);
+      // Implement better content search
+      // this.pageContentMatch(page);
     });
 
     return Object.values(this.searchResults).sort((a, b) => {
@@ -21,7 +22,7 @@ export default class OfflineEngine {
       }
 
       return 0;
-    }).slice(0, 100);
+    }).slice(0, 15);
   }
 
   prepare(term) {
