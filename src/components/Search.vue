@@ -14,6 +14,7 @@
                  v-model="term"
                  @input="search"
                  @focus="search"
+                 @blur="clearResults"
           >
           <span class="tt-dropdown-menu">
             <transition name="slide-fade">
