@@ -14,7 +14,6 @@
                  v-model="term"
                  @input="search"
                  @focus="search"
-                 @blur="clearResults"
           >
           <span class="tt-dropdown-menu">
             <transition name="slide-fade">
@@ -102,7 +101,7 @@ export default {
         if (pageEl) {
           pageEl.classList.remove('layout_transparent');
         }
-      }, 1000);
+      }, 200);
     },
 
     goToResult(searchResult) {
