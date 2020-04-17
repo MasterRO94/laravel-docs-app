@@ -57,6 +57,9 @@ export default {
   #app .layout_transparent {
     opacity: 0.1;
   }
+  #app .autocomplete-wrapper .h1 {
+    font-weight: bold;
+  }
 
   .sidebar {
     padding-bottom: 40px;

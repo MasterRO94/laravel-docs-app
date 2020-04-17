@@ -16,10 +16,6 @@
                  @focus="search"
                  @blur="clearResults"
           >
-          <pre aria-hidden="true"
-               style="position: absolute; visibility: hidden; white-space: pre; font-family: scandia-web, sans-serif; font-size: 16px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0.5px; text-indent: 0px; text-rendering: auto; text-transform: none;"
-               data-initialized="true"
-          />
           <span class="tt-dropdown-menu">
             <transition name="slide-fade">
               <div
@@ -33,8 +29,13 @@
                    class="tt-suggestions"
                    style="display: block;"
                    @click="goToResult(searchResult)"
+                   @mouseover="markAsActive(searchResult)"
+                   @mouseleave="markAsInActive(searchResult)"
                >
-                <div class="tt-suggestion">
+                <div
+                    class="tt-suggestion"
+                    :class="{'tt-cursor': activeResult === searchResult.uri}"
+                >
                   <div class="autocomplete-wrapper" style="white-space: normal;">
                     <div class="h1">
                       {{ searchResult.sectionTitle }}
@@ -75,24 +76,32 @@ export default {
     return {
       term: '',
       results: [],
+      activeResult: null,
     };
   },
 
   methods: {
     search() {
       this.results = Search.search(this.term);
+      const pageEl = document.getElementById('docsPageContent');
 
-      if (this.results.length) {
-        document.getElementById('docsPageContent').classList.add('layout_transparent');
-      } else {
-        document.getElementById('docsPageContent').classList.remove('layout_transparent');
+      if (pageEl) {
+        if (this.results.length) {
+          document.getElementById('docsPageContent').classList.add('layout_transparent');
+        } else {
+          document.getElementById('docsPageContent').classList.remove('layout_transparent');
+        }
       }
     },
 
     clearResults() {
       setTimeout(() => {
         this.results = [];
-        document.getElementById('docsPageContent').classList.remove('layout_transparent');
+        const pageEl = document.getElementById('docsPageContent');
+
+        if (pageEl) {
+          pageEl.classList.remove('layout_transparent');
+        }
       }, 1000);
     },
 
@@ -100,6 +109,16 @@ export default {
       this.term = '';
       this.results = [];
       this.$router.push(searchResult.uri);
+    },
+
+    markAsActive(searchResult) {
+      this.activeResult = searchResult.uri;
+    },
+
+    markAsInActive(searchResult) {
+      if (this.activeResult === searchResult.uri) {
+        this.activeResult = null;
+      }
     },
   },
 };
