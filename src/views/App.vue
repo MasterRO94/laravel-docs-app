@@ -133,6 +133,7 @@ export default {
 
   *::-webkit-scrollbar {
     width: 3px;
+    height: 3px;
   }
 
   *::-webkit-scrollbar-track {

@@ -69,7 +69,7 @@ export default class AppMenu {
         submenu: [
           { role: 'reload' },
           { role: 'forcereload' },
-          ...(kernel.isDevelopment ? [
+          ...(kernel.isDevelopment || true ? [
             { role: 'toggledevtools' },
           ] : []),
           { type: 'separator' },
