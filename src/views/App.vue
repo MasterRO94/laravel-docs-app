@@ -92,6 +92,10 @@ export default {
       bottom: 0;
       left: 15px;
     }
+
+    .back_to_top_arrow {
+      width: 30px;
+    }
   }
 
   .nav--on .beta_badge {
