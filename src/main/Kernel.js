@@ -15,7 +15,10 @@ export default class Kernel {
     this.updaterMenuItem = null;
     this.isDevelopment = process.env.NODE_ENV !== 'production';
     unhandled();
-    this.updater = Updater.create(this);
+
+    if (!this.isLinux()) {
+      this.updater = Updater.create(this);
+    }
   }
 
   static create() {
@@ -31,7 +34,10 @@ export default class Kernel {
       this.registerSchemesAsPrivileged();
       this.defineMenu();
       this.registerAppEvents();
-      this.updater.init();
+
+      if (!this.isLinux()) {
+        this.updater.init();
+      }
     }
   }
 
