@@ -14,6 +14,8 @@ module.exports = {
         },
         linux: {
           target: ['snap', 'AppImage', 'deb', 'pacman', 'apk', 'rpm', 'tar.gz', 'tar.xz'],
+          category: 'Development',
+          icon: 'public/img/logomark.png',
         },
       },
     },
