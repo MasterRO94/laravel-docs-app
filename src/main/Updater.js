@@ -104,11 +104,11 @@ export default class Updater {
         buttons: ['Sure', 'No'],
       });
 
+      this.kernel.mainWindow.setProgressBar(-1);
+
       if (response === 0) {
         autoUpdater.quitAndInstall();
       }
-
-      this.kernel.mainWindow.setProgressBar(-1);
     });
   }
 
