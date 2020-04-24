@@ -17,20 +17,34 @@ export default {
       commit('setAppLoading', true);
     }
 
+    const loadedDocs = {};
     for (const version of Object.keys(Documentation.versions())) {
+      loadedDocs[version] = localStorage.getItem(`docs.${version}`) || null;
+    }
+
+    const versions = Object.keys(Documentation.versions());
+    for (const version of versions) {
       const docs = localStorage.getItem(`docs.${version}`);
+
+      if (!state.appLoadingProgress) {
+        commit('setAppLoadingProgress', 0);
+      }
 
       if (!docs) {
         await dispatch('loadDocsForVersion', version);
 
+        commit('setAppLoadingProgress', state.appLoadingProgress + (100 / versions.length));
+
         if (state.currentVersion !== version) {
           commit('clearDocs', version);
         }
-      } else if(state.currentVersion === version) {
+      } else if (state.currentVersion === version) {
         commit('setDocs', { version, docs: JSON.parse(docs) });
+        commit('setAppLoadingProgress', state.appLoadingProgress + (100 / versions.length));
       }
     }
 
+    commit('setAppLoadingProgress', 100);
     commit('setAppLoadingCaption', '');
     commit('setAppLoading', false);
   },
@@ -42,13 +56,20 @@ export default {
     localStorage.setItem(`docs.${version}`, JSON.stringify(state.docs[version]));
   },
 
-  async loadDocs({ commit, dispatch }) {
+  async loadDocs({ state, commit, dispatch }) {
     commit('setBackgroundLoading', true);
 
-    for (const version of Object.keys(Documentation.versions())) {
-      await dispatch('loadDocsForVersion', version);
+    if (!state.appLoadingProgress) {
+      commit('setAppLoadingProgress', 0);
     }
 
+    const versions = Object.keys(Documentation.versions());
+    for (const version of versions) {
+      await dispatch('loadDocsForVersion', version);
+      commit('setAppLoadingProgress', state.appLoadingProgress + (100 / versions.length));
+    }
+
+    commit('setAppLoadingProgress', 100);
     commit('setAppLoadingCaption', '');
     commit('setBackgroundLoading', false);
   },
@@ -62,7 +83,7 @@ export default {
   },
 
   async loadPages({ commit }, version) {
-    commit('setAppLoadingCaption', `Loading pages for version ${version}...`);
+    commit('setAppLoadingCaption', `Loading documentation pages for version ${version}...`);
 
     const pagesArr = await Api.loadPages(version);
 

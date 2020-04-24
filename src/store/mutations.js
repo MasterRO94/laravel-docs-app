@@ -9,6 +9,10 @@ export default {
     state.appLoadingCaption = caption;
   },
 
+  setAppLoadingProgress(state, progress) {
+    state.appLoadingProgress = progress;
+  },
+
   setBackgroundLoading(state, loading) {
     state.backgroundLoading = loading;
   },

@@ -2,7 +2,6 @@
   <div id="app">
     <loader-full-screen
         v-if="$store.state.appLoading"
-        :caption="$store.state.appLoadingCaption"
     />
 
     <div v-else

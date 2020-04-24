@@ -13,6 +13,7 @@ Object.keys(Documentation.versions()).forEach((version) => {
 export default {
   appLoading: true,
   appLoadingCaption: 'Loading docs...',
+  appLoadingProgress: null,
   backgroundLoading: false,
   contentLoading: false,
   currentVersion: config.defaultVersion,
