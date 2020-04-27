@@ -17,6 +17,15 @@ module.exports = {
           category: 'Development',
           icon: 'public/img/logomark.png',
         },
+        extraFiles: [
+          {
+            'from': 'src/assets/main',
+            'to': 'resources',
+            'filter': [
+              '**/*',
+            ],
+          },
+        ],
       },
     },
   },

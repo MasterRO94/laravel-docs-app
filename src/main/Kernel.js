@@ -6,6 +6,7 @@ import createProtocol from 'vue-cli-plugin-electron-builder/lib/createProtocol';
 import unhandled from 'electron-unhandled';
 import log from 'electron-log';
 import Updater from './Updater';
+import AppTray from './AppTray';
 
 export default class Kernel {
   constructor() {
@@ -13,6 +14,7 @@ export default class Kernel {
     // be closed automatically when the JavaScript object is garbage collected.
     this.mainWindow = null;
     this.updaterMenuItem = null;
+    this.tray = null;
     this.isDevelopment = process.env.NODE_ENV !== 'production';
     unhandled();
 
@@ -58,6 +60,10 @@ export default class Kernel {
     AppMenu.defineMenu(this);
   }
 
+  defineTray() {
+    this.tray = AppTray.defineTray(this);
+  }
+
   sendStatusToWindow(channel, message) {
     if (!message) {
       message = channel;
@@ -85,10 +91,6 @@ export default class Kernel {
 
     this.mainWindow.once('ready-to-show', async () => {
       this.mainWindow.show();
-
-      if (!this.isLinux()) {
-        this.updater.checkForUpdates();
-      }
     });
 
     this.mainWindow.flashFrame(true);
@@ -125,6 +127,10 @@ export default class Kernel {
         shell.openExternal(reqUrl);
       }
     });
+
+    this.mainWindow.webContents.on('devtools-opened', () => {
+      this.mainWindow.webContents.focus();
+    });
   }
 
   registerAppEvents() {
@@ -140,7 +146,7 @@ export default class Kernel {
     app.on('activate', async () => {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
-      if (this.mainWindow === null) {
+      if (null === this.mainWindow) {
         this.createWindow();
       }
     });
@@ -172,6 +178,11 @@ export default class Kernel {
       }
 
       this.createWindow();
+      this.defineTray();
+
+      if (!this.isLinux()) {
+        this.updater.checkForUpdates();
+      }
     });
 
     // Exit cleanly on request from parent process in development mode.
