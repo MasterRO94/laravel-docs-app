@@ -85,7 +85,10 @@ export default class Kernel {
 
     this.mainWindow.once('ready-to-show', async () => {
       this.mainWindow.show();
-      await this.updater.checkForUpdates();
+
+      if (!this.isLinux()) {
+        this.updater.checkForUpdates();
+      }
     });
 
     this.mainWindow.flashFrame(true);
