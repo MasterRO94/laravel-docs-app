@@ -40,9 +40,18 @@ export default {
 
 <style>
   @import '../assets/css/app.css';
+  @import '../assets/css/opensans.css';
 
   #app {
     min-height: 600px;
+    font-family: Open Sans, sans-serif;
+    font-weight: 400;
+    color: #090910;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  #app h1, #app h2, #app h3, #app h4, #app h5, #app h6, #app input, #app textarea, button {
+    font-family: Open Sans, sans-serif;
   }
 
   #app .body_content {
@@ -62,6 +71,10 @@ export default {
 
   .sidebar {
     padding-bottom: 40px;
+  }
+
+  .sidebar_layout .sidebar nav .navigation_contain ul li h2 {
+    font-weight: 600;
   }
 
   .text-center {
