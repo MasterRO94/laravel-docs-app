@@ -25,18 +25,18 @@
                 class="tt-dataset-0"
               >
                <span
-                 v-for="searchResult in results"
+                 v-for="(searchResult, i) in results"
                  :key="searchResult.uri"
                  :to="searchResult.uri"
                  class="tt-suggestions"
                  style="display: block;"
                  @click="goToResult(searchResult)"
-                 @mouseover="markAsActive(searchResult)"
+                 @mouseover="markAsActive(searchResult, i)"
                  @mouseleave="markAsInActive(searchResult)"
                >
                 <div
                   class="tt-suggestion"
-                  :class="{'tt-cursor': activeResult === searchResult.uri}"
+                  :class="{'tt-cursor': activeResult && activeResult.index === i}"
                 >
                   <div class="autocomplete-wrapper" style="white-space: normal;">
                     <div class="h1">
@@ -78,16 +78,8 @@ export default {
     window.addEventListener(
       'keyup',
       (e) => {
-        if (
-          (!/^[a-z0-9]$/i.test(e.key) && '/' !== e.key) ||
-          this.$refs.searchInput === document.activeElement
-        ) {
-          return;
-        }
-
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        this.$refs.searchInput.focus();
-        this.term += e.key !== '/' ? e.key : '';
+        this.focusSearch(e);
+        this.navigateSearchResults(e);
       },
       true,
     );
@@ -103,6 +95,7 @@ export default {
 
   methods: {
     search() {
+      this.activeResult = null;
       this.results = Search.search(this.term);
       const pageEl = document.getElementById('docsPageContent');
 
@@ -132,13 +125,72 @@ export default {
       this.$router.push(searchResult.uri);
     },
 
-    markAsActive(searchResult) {
-      this.activeResult = searchResult.uri;
+    markAsActive(searchResult, index) {
+      this.activeResult = { ...searchResult, index };
     },
 
     markAsInActive(searchResult) {
-      if (this.activeResult === searchResult.uri) {
+      if (this.activeResult && this.activeResult.uri === searchResult.uri) {
         this.activeResult = null;
+      }
+    },
+
+    focusSearch(e) {
+      if (
+        (!/^[a-z0-9]$/i.test(e.key) && '/' !== e.key) ||
+        this.$refs.searchInput === document.activeElement
+      ) {
+        return;
+      }
+
+      e.preventDefault();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      this.$refs.searchInput.focus();
+      this.term += e.key !== '/' ? e.key : '';
+    },
+
+    navigateSearchResults(e) {
+      if (!this.results.length) {
+        return;
+      }
+
+      e.preventDefault();
+
+      if ('ArrowDown' === e.key) {
+        if (!this.activeResult) {
+          this.activeResult = {
+            index: 0,
+            ...this.results[0],
+          };
+        } else if (this.results.length - 1 > this.activeResult.index) {
+          this.activeResult = {
+            index: this.activeResult.index + 1,
+            ...this.results[this.activeResult.index + 1],
+          };
+        } else {
+          this.activeResult = {
+            index: this.results.length - 1,
+            ...this.results[this.results.length - 1],
+          };
+        }
+
+        return;
+      }
+
+      if ('ArrowUp' === e.key) {
+        if (this.activeResult && this.activeResult.index > 0) {
+          this.activeResult = {
+            index: this.activeResult.index - 1,
+            ...this.results[this.activeResult.index - 1],
+          };
+        }
+
+        return;
+      }
+
+      if ('Enter' === e.key && this.activeResult) {
+        this.goToResult(this.activeResult);
       }
     },
   },
