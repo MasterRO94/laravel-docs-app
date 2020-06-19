@@ -75,10 +75,19 @@ export default {
   name: 'Search',
 
   mounted() {
-    window.addEventListener('keyup',
-      () => {
+    window.addEventListener(
+      'keyup',
+      (e) => {
+        if (
+          (!/^[a-z0-9]$/i.test(e.key) && '/' !== e.key) ||
+          this.$refs.searchInput === document.activeElement
+        ) {
+          return;
+        }
+
         window.scrollTo({ top: 0, behavior: 'smooth' });
         this.$refs.searchInput.focus();
+        this.term += e.key !== '/' ? e.key : '';
       },
       true,
     );
