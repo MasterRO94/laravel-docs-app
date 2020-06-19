@@ -2,39 +2,41 @@
   <div class="search_contain">
     <div class="input_group search icon">
         <span class="twitter-typeahead" style="position: relative; display: inline-block; direction: ltr;">
-          <input type="text"
-                 id="search-docs-input"
-                 placeholder="Search Docs"
-                 class="search_input tt-input"
-                 aria-label="Search in the documentation"
-                 autocomplete="off"
-                 spellcheck="false"
-                 dir="auto"
-                 style="position: relative; vertical-align: top;"
-                 v-model="term"
-                 @input="search"
-                 @focus="search"
-                 @blur="clearResults"
+          <input
+            type="text"
+            id="search-docs-input"
+            placeholder="Search Docs"
+            class="search_input tt-input"
+            aria-label="Search in the documentation"
+            autocomplete="off"
+            spellcheck="false"
+            dir="auto"
+            ref="searchInput"
+            style="position: relative; vertical-align: top;"
+            v-model="term"
+            @input="search"
+            @focus="search"
+            @blur="clearResults"
           >
           <span class="tt-dropdown-menu">
             <transition name="slide-fade">
               <div
-                  v-show="results.length"
-                  class="tt-dataset-0"
+                v-show="results.length"
+                class="tt-dataset-0"
               >
                <span
-                   v-for="searchResult in results"
-                   :key="searchResult.uri"
-                   :to="searchResult.uri"
-                   class="tt-suggestions"
-                   style="display: block;"
-                   @click="goToResult(searchResult)"
-                   @mouseover="markAsActive(searchResult)"
-                   @mouseleave="markAsInActive(searchResult)"
+                 v-for="searchResult in results"
+                 :key="searchResult.uri"
+                 :to="searchResult.uri"
+                 class="tt-suggestions"
+                 style="display: block;"
+                 @click="goToResult(searchResult)"
+                 @mouseover="markAsActive(searchResult)"
+                 @mouseleave="markAsInActive(searchResult)"
                >
                 <div
-                    class="tt-suggestion"
-                    :class="{'tt-cursor': activeResult === searchResult.uri}"
+                  class="tt-suggestion"
+                  :class="{'tt-cursor': activeResult === searchResult.uri}"
                 >
                   <div class="autocomplete-wrapper" style="white-space: normal;">
                     <div class="h1">
@@ -47,9 +49,9 @@
                       </div>
 
                       <div
-                          v-show="searchResult.description"
-                          class="h3"
-                          style="margin-left: 5px;"
+                        v-show="searchResult.description"
+                        class="h3"
+                        style="margin-left: 5px;"
                       >
                         &gt; {{ searchResult.description }}
                       </div>
@@ -71,6 +73,10 @@ import Search from '../services/Search/Search';
 
 export default {
   name: 'Search',
+
+  mounted() {
+    window.addEventListener('keyup', () => this.$refs.searchInput.focus(), true);
+  },
 
   data() {
     return {

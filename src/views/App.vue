@@ -69,6 +69,10 @@ export default {
     font-weight: bold;
   }
 
+  .page_contain, .docs_body .docs_main {
+    max-width: 100%;
+  }
+
   .sidebar {
     padding-bottom: 40px;
   }
