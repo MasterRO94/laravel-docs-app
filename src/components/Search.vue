@@ -75,7 +75,13 @@ export default {
   name: 'Search',
 
   mounted() {
-    window.addEventListener('keyup', () => this.$refs.searchInput.focus(), true);
+    window.addEventListener('keyup',
+      () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        this.$refs.searchInput.focus();
+      },
+      true,
+    );
   },
 
   data() {
