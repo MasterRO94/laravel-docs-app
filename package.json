@@ -9,7 +9,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "electron:build": "vue-cli-service electron:build -mwl -p always",
+    "electron:build": "vue-cli-service electron:build -ml -p always",
     "electron:build-dev": "vue-cli-service electron:build",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
@@ -18,29 +18,29 @@
   "main": "background.js",
   "dependencies": {
     "axios": "^0.19.2",
-    "core-js": "^3.6.4",
-    "electron-log": "^4.1.1",
+    "core-js": "^3.6.5",
+    "electron-log": "^4.2.4",
     "electron-unhandled": "^3.0.2",
-    "electron-updater": "^4.2.5",
-    "prismjs": "^1.19.0",
-    "vue": "^2.6.11",
+    "electron-updater": "^4.3.5",
+    "prismjs": "^1.21.0",
+    "vue": "^2.6.12",
     "vue-prism": "^1.0.5",
-    "vue-router": "^3.1.5",
-    "vuex": "^3.1.2"
+    "vue-router": "^3.4.5",
+    "vuex": "^3.5.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.2.0",
-    "@vue/cli-plugin-eslint": "^4.2.0",
-    "@vue/cli-plugin-router": "^4.2.0",
-    "@vue/cli-plugin-vuex": "^4.2.0",
-    "@vue/cli-service": "^4.2.0",
+    "@vue/cli-plugin-babel": "^4.5.6",
+    "@vue/cli-plugin-eslint": "^4.5.6",
+    "@vue/cli-plugin-router": "^4.5.6",
+    "@vue/cli-plugin-vuex": "^4.5.6",
+    "@vue/cli-service": "^4.5.6",
     "babel-eslint": "^10.0.3",
     "devtron": "^1.4.0",
-    "electron": "^8.2.0",
-    "electron-builder": "^22.4.1",
+    "electron": "^8.5.2",
+    "electron-builder": "^22.8.1",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.1.2",
     "vue-cli-plugin-electron-builder": "^1.4.6",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.12"
   }
 }
