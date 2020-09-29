@@ -1,7 +1,7 @@
 {
   "name": "laravel-docs-app",
   "productName": "Laravel Docs App",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "private": true,
   "author": "Laravel LLC and Roman Ihoshyn <igoshin18@gmail.com>",
   "description": "Desktop application for browsing Laravel Framework documentation",
