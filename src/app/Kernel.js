@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import router from '../router';
+import RoutesManager from '@/router/RoutesManager';
 import store from '../store';
 import App from '../views/App';
 import Application from './Application';
@@ -7,6 +7,7 @@ import { ipcRenderer } from 'electron';
 import Loader from '../components/Loader';
 import LoaderFullScreen from '../components/LoaderFullScreen';
 import ProcessBus from './ProcessBus';
+import DocsPage from '@/views/DocsPage';
 
 export default class Kernel {
   static create() {
@@ -18,8 +19,10 @@ export default class Kernel {
 
     this.registerComponents();
 
+    this.registerModuleRoutes();
+
     const VueApp = new Vue({
-      router,
+      router: RoutesManager.getRouter(),
       store,
       render: h => h(App),
     });
@@ -35,5 +38,16 @@ export default class Kernel {
   registerComponents() {
     Vue.component('loader', Loader);
     Vue.component('loader-full-screen', LoaderFullScreen);
+  }
+
+  registerModuleRoutes() {
+    RoutesManager.addChildRoute(
+      {
+        path: '/docs/:version/:page/children',
+        name: 'docsPageChildren',
+        component: DocsPage,
+      },
+      'docsPage',
+    );
   }
 }

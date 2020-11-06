@@ -1,5 +1,6 @@
 import Api from '../api/Api';
 import Documentation from '../app/Documentation';
+import Search from '@/services/Search/Search';
 
 export default {
   async loadState({ state, commit, dispatch }) {
@@ -111,9 +112,15 @@ export default {
     commit('setCurrentDocsVersion', version);
     commit('clearDocs', previousVersion);
 
+    dispatch('indexDocs');
+
     commit('setAppLoading', false);
     commit('setContentLoading', false);
 
     localStorage.setItem('defaultDocsVersion', version);
+  },
+
+  indexDocs({ state }) {
+    Search.index(state.docs[state.currentVersion].pages);
   },
 };

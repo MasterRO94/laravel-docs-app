@@ -2,6 +2,18 @@ import Application from '../../app/Application';
 import SearchResultItem from './SearchResultItem';
 
 export default class OfflineEngine {
+  static create() {
+    if (!OfflineEngine.$instance) {
+      OfflineEngine.$instance = new this();
+    }
+
+    return OfflineEngine.$instance;
+  }
+
+  index(docs) {
+    return true;
+  }
+
   search(term) {
     this.prepare(term);
 

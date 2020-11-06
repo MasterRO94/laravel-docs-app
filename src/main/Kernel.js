@@ -28,6 +28,8 @@ export default class Kernel {
   }
 
   init() {
+    log.transports.file.level = 'info';
+
     const gotTheLock = app.requestSingleInstanceLock();
 
     if (!gotTheLock) {

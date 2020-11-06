@@ -19,6 +19,7 @@ export default class Application {
     this.vueApp.$mount('#app');
 
     await this.vueApp.$store.dispatch('loadState');
+    await this.vueApp.$store.dispatch('indexDocs');
 
     this.vueApp.$store.commit('setAppLoading', false);
   }

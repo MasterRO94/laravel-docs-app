@@ -29,21 +29,4 @@ const routes = [
   },
 ];
 
-const router = new VueRouter({
-  mode: process.env.IS_ELECTRON ? 'hash' : 'history',
-  base: process.env.BASE_URL,
-  linkActiveClass: 'active',
-  scrollBehavior(to) {
-    if (to.hash) {
-      return { selector: to.hash };
-    }
-
-    return {
-      x: 0,
-      y: 0,
-    };
-  },
-  routes,
-});
-
-export default router;
+export default routes;
