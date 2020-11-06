@@ -27,12 +27,16 @@ export default class LunrEngine {
   search(term) {
     this.term = term;
 
-    return this.idx
-      .search(term)
-      .slice(0, 15)
-      .map(result => {
-        return this.createSearchResult(this.pages[result.ref], result);
-      });
+    try {
+      return this.idx
+        .search(term)
+        .slice(0, 15)
+        .map(result => {
+          return this.createSearchResult(this.pages[result.ref], result);
+        });
+    } catch (e) {
+      return [];
+    }
   }
 
   createSearchResult(page, resultMeta) {
