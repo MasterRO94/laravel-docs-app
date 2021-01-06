@@ -17,7 +17,7 @@
   },
   "main": "background.js",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "electron-log": "^4.3.0",
     "electron-unhandled": "^3.0.2",
